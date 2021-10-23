@@ -1,8 +1,4 @@
-import React from 'react'
-import Router from './Router'
-import {BrowserRouter} from 'react-router-dom'
-import { ThemeProvider } from '@material-ui/styles'
-import theme from './theme'
+
 import { CssBaseline } from '@material-ui/core'
 import { Helmet } from 'react-helmet';
 
