@@ -1,24 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react'
+import Router from './Router'
+import {BrowserRouter} from 'react-router-dom'
+import { ThemeProvider } from '@material-ui/styles'
+import theme from './theme'
 
 const App = () => {
-  let [state, setState] = useState();
-  let [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    fetch('/api')
-    .then(res => res.json())
-    .then(data => {
-      setState(data);
-      setIsLoading(false);
-    });
-  }, []);
-
   return (
-    <div className="App">
-      <h3>This is Donodaddy</h3>
-      {isLoading ? <p>Loading...</p> : <p>{state.message}</p>}
-    </div>
-  );
-}
+  <BrowserRouter>
+      <ThemeProvider theme={theme}>
+        <Router/>
+      </ThemeProvider>
+  </BrowserRouter>
+)}
 
-export default App;
+export default App
