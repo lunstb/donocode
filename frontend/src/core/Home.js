@@ -45,39 +45,27 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Home(){
     const classes = useStyles()
-  
-    let [state, setState] = useState();
-    let [isLoading, setIsLoading] = useState(true);
     
-      useEffect(() => {
-        fetch('/api')
-        .then(res => res.json())
-        .then(data => {
-          setState(data);
-          setIsLoading(false);
-        });
-      }, []);
-    
-      return (
-        <AppBar position="static" className={classes.appBar}>
-            <Toolbar className={classes.toolbar}>
-                <Link className={clsx(classes.title, classes.logo)} to="/">
-                    <Typography aria-label="Home" variant="h6">
-                        <b>DonoCode</b>
-                    </Typography>
-                </Link>
-                <Link className={classes.title} to="/">
-                    <Typography aria-label="Home" variant="h6">
-                        About
-                    </Typography>
-                </Link>
-                <Link className={classes.title} to="/">
-                    <Typography aria-label="Home" variant="h6">
-                        FAQ
-                    </Typography>
-                </Link>
-            </Toolbar>
-        </AppBar>
-      );
+    return (
+    <AppBar position="static" className={classes.appBar}>
+        <Toolbar className={classes.toolbar}>
+            <Link className={clsx(classes.title, classes.logo)} to="/">
+                <Typography aria-label="Home" variant="h6">
+                    <b>DonoCode</b>
+                </Typography>
+            </Link>
+            <Link className={classes.title} to="/">
+                <Typography aria-label="Home" variant="h6">
+                    About
+                </Typography>
+            </Link>
+            <Link className={classes.title} to="/">
+                <Typography aria-label="Home" variant="h6">
+                    FAQ
+                </Typography>
+            </Link>
+        </Toolbar>
+    </AppBar>
+    );
 }
 
