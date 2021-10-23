@@ -1,4 +1,5 @@
 const express = require("express");
+const database = require("./../../database/database");
 
 const qrRouter = express.Router()
 
@@ -7,15 +8,27 @@ qrRouter.route('/register')
   .post((req, res) => {
     var qrCodes = JSON.parse(req.body.qrCodes)
 
-  
-    res.send('ur special jk ur based')
+    qrCodes.forEach(qrCode => {
+      const donation = {
+        "qrId": qrCode.qrId,
+        "account": qrCode.account,
+        "phone": qrCode.phone,
+        "message": qrCode.message
+      }
+
+      if(donation.account){
+        await database.createDonationLinked(donation.qrId,donation.account, donation.message);
+      }else{
+        await database.createDonationUnlinked(donation.qrId, donation.phone, donation.message)
+      }
+    });
   })
 
 qrRouter.route('/getstatus:donationId')
-  .get((req, res) => {
+  .get(async (req, res) => {
     var donationId = req.params.donationId;
 
-    res.send(donationId);
+    res.send(await database.getStatus(donationId));
   })
 
 qrRouter.route('/sendmessage')
