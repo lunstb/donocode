@@ -5,7 +5,7 @@ const qrRouter = express.Router()
 
 
 qrRouter.route('/register')
-  .post((req, res) => {
+  .post(async (req, res) => {
     var qrCodes = JSON.parse(req.body.qrCodes)
 
     qrCodes.forEach(qrCode => {
