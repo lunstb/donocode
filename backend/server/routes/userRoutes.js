@@ -15,7 +15,7 @@ userRouter.route('/profile/:userId')
   })
 
 userRouter.route('/setprofile')
-  .post((req, res) => {
+  .post(async (req, res) => {
     var profileId = req.body.profileId
     var profile = {
       "firstName": req.body.firstName,

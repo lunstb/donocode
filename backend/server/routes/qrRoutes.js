@@ -8,7 +8,7 @@ qrRouter.route('/register')
   .post(async (req, res) => {
     var qrCodes = JSON.parse(req.body.qrCodes)
 
-    qrCodes.forEach(qrCode => {
+    await qrCodes.forEach(async qrCode => {
       const donation = {
         "qrId": qrCode.qrId,
         "account": qrCode.account,
