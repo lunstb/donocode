@@ -9,15 +9,26 @@ let db = new sqlite3.Database('./database/donocode.db', sqlite3.OPEN_READWRITE, 
 });
 
 db.serialize(() => {
-    db.prepare('CREATE TABLE IF NOT EXISTS qrTable (id integer primary key autoincrement, qrId TEXT, account INTEGER, phone TEXT, message TEXT, messageReceived TEXT, dateReceived DATE)').run().finalize()
-    db.prepare('CREATE TABLE IF NOT EXISTS accounts (id integer primary key autoincrement, firstName TEXT, lastName TEXT, phone TEXT)').run().finalize()
+    db.prepare(`CREATE TABLE IF NOT EXISTS qrTable 
+                (
+                  id integer primary key autoincrement, 
+                  qrId TEXT, 
+                  account INTEGER, 
+                  phone TEXT, 
+                  message TEXT, 
+                  messageReceived TEXT, 
+                  dateReceived DATE
+                )`).run().finalize()
 
-    
+    db.prepare(`CREATE TABLE IF NOT EXISTS accounts 
+                (
+                  id integer primary key autoincrement, 
+                  firstName TEXT, 
+                  lastName TEXT, 
+                  phone TEXT
+                )`).run().finalize()
+});
 
-    db.get(`SELECT * FROM qrTable`, (err, row) => {
-      console.log(row)
-  });
-})
 
 
 
@@ -188,7 +199,7 @@ const test = () => {
     createDonationLinked("TestID", 1, "happy birthday")    
 }
 
-// test()
+test()
 
 module.exports = {
   getProfile,
