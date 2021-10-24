@@ -178,11 +178,13 @@ const useStyles = makeStyles((theme) => ({
           },
     },
     faq: {
+        // height: '100vh',
+        // minHeight: '800px',
         color: '#51323C',
         fontSize: '4.5em',
         fontWeight:'900',
         margin: '10vh',
-        // paddingTop: '100px ',
+        paddingBottom: '25px ',
 
         // ['@media(max-width: 950px)'] : {
             
@@ -272,7 +274,7 @@ export default function Home(){
         <h3 className={classes.faqsubtitle}>Will my donation receipient still be able to message me muiltiple times?</h3>
         <p className={classes.faqinfo}>No. To avoid possible cases of unwanted spam messages, once a recipient scans a DonoCode, they will have one chance to send a message. Once they do so, DonoCode will no longer allow for messages to the donor. </p>
         <h3 className={classes.faqsubtitle}>Who created this really really really cool application?</h3>
-        <p className={classes.faqinfo}>A group of 5 Vanderbilt sophomores got together for HackDuke and discovered an amazing idea that had not been created before. Wanting to encourage both donor and donation recipients alike, we created an application that would make giving donations a little bit more special :)</p>
+        <p className={classes.faqinfo}>A group of 5 Vanderbilt sophomores got together for HackDuke's 2021 Code for Good and discovered an amazing idea that had not been created before. Wanting to encourage both donor and donation recipients alike, we created an application that would make giving donations a little bit more special :)</p>
     </div>
     
     
