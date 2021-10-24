@@ -6,6 +6,7 @@ import { Toolbar } from '@material-ui/core';
 import clsx from 'clsx'
 import { useAuth } from "../AuthContext";
 import { useHistory } from "react-router-dom";
+import firebase from "../firebase";
 
 const useStyles = makeStyles((theme) => ({
     h1: {
@@ -104,16 +105,29 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Settings(){
     const [error, setError] = useState(null);
-    const { currentUser, signout } = useAuth();
-    const [isLoading, setIsLoading] = useState(false);
+    const { signout } = useAuth();
+    const [isLoading, setIsLoading] = useState(true);
     const history = useHistory();
+    const [user, setUser] = useState();
+    const fireId = firebase.auth().currentUser.uid;
+    const email = firebase.auth().currentUser.email;
+
+
+    useEffect(() => {
+      fetch("/api/user/profile/" + fireId)
+      .then(res => res.json())
+      .then(data => {
+        setUser(data);
+        setIsLoading(false);
+        console.log(isLoading);
+      })
+      .catch(err => console.log(err));
+    }, []);
 
     const handleSignout = async () => {
         setError("");
         try {
-            setIsLoading(true);
             await signout();
-            setIsLoading(false);
             history.push("/signin");
         } catch {
             setError("Error signing out");
@@ -121,8 +135,10 @@ export default function Settings(){
     };
 
     const classes = useStyles()
-    
+
     return (
+      isLoading ?
+      <div>Loading...</div> :
       <div>
     <AppBar position="static" className={classes.appBar}>
         <Toolbar className={classes.toolbar}>
@@ -144,20 +160,19 @@ export default function Settings(){
           <div>
             <h3 className={classes.h3}>Name</h3>
             <div>
-              <TextField className={classes.textField} label="First Name" id="outlined-basic" variant="outlined" />
-              <TextField className={classes.textField} label="Last Name" id="outlined-basic" variant="outlined" />
-              
+              <TextField className={classes.textField} label="First Name" id="outlined-basic" variant="outlined" placeholder={user.firstName} />
+              <TextField className={classes.textField} label="Last Name" id="outlined-basic" variant="outlined" placeholder={user.lastName}/>
             </div>
           </div>
 
           <div className={classes.alignHorizontal}>
             <div className={classes.child}>
               <h3 className={classes.h3}>Login Email</h3>
-              <TextField className={clsx(classes.textField,classes.wideTextInput)} label="Email" id="outlined-basic" variant="outlined" />
+              <TextField className={clsx(classes.textField,classes.wideTextInput)} label="Email" id="outlined-basic" variant="outlined" placeholder={email}/>
             </div>
             <div className={classes.child}>
               <h3 className={classes.h3}>Contact</h3>
-              <TextField className={clsx(classes.textField,classes.wideTextInput)} label="Phone Number" id="outlined-basic" variant="outlined" />
+              <TextField className={clsx(classes.textField,classes.wideTextInput)} label="Phone Number" id="outlined-basic" variant="outlined" placeholder={user.phone}/>
             </div>
             <div className={clsx(classes.child, classes.emptyDiv)}></div>
 
@@ -170,11 +185,10 @@ export default function Settings(){
               <TextField className={clsx(classes.textField,classes.wideTextInput)} id="outlined-basic" label="New Password" variant="outlined" type="password" />
               <TextField className={clsx(classes.textField,classes.wideTextInput)} id="outlined-basic" label="Confirm Password" variant="outlined" type="password" />
             </div>
-            
           </div>
         </div>
         <Button className={classes.saveButton} variant="contained" disableElevation>Save</Button>
-        <Button className={classes.logoutButton} disabled={isLoading} disableElevation onClick={handleSignout}>Log Out</Button>
+        <Button className={classes.logoutButton} disableElevation onClick={handleSignout}>Log Out</Button>
     </div>
     );
 }

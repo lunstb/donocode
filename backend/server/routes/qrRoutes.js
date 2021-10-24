@@ -1,8 +1,13 @@
 const express = require("express");
 const database = require("./../../database/database");
-
 const qrRouter = express.Router()
 
+require("dotenv").config({ path: "../../.env" });
+const twilio = require("twilio");
+const twilioSID = process.env.TWILIO_SID || "AC958fdda0d79c5184f7e0ea64057dce31";
+const twilioAuthToken = process.env.TWILIO_AUTH_TOKEN || "8bf927a61fe890465b8e9d14cc26ce7f";
+const twilioNumber = process.env.TWILIO_NUMBER || "+13344630812";
+const client = new twilio(twilioSID, twilioAuthToken);
 
 qrRouter.route('/register')
   .post(async (req, res) => {
@@ -38,12 +43,23 @@ qrRouter.route('/getstatus:donationId')
   })
 
 qrRouter.route('/sendmessage')
-  .post((req, res) => {
-    var donationId = req.body.donationId,
-        donationMsg = req.body.donationMsg;
-
-    console.log(donationId+" "+donationMsg)
-    res.send('ur special jk ur based')
+  .post(async (req, res) => {
+    console.log("inside send message", req.body);
+    var { fireId, donationMsg }  = req.body;
+    var profileInfo = await database.getProfile(fireId);
+    client.messages.create({
+      body: donationMsg,
+      from: twilioNumber,
+      to: profileInfo.phone
+    })
+    .then(message => {
+      console.log("Message sent with id", message.sid);
+    })
+    .catch(err => {
+      console.log("Error sending message", err);
+    })
+    res.send("Message Sent");
   })
+
 
 module.exports = qrRouter

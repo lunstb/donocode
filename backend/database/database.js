@@ -24,6 +24,7 @@ db.serialize(() => {
     db.prepare(`CREATE TABLE IF NOT EXISTS accounts 
                 (
                   id integer primary key autoincrement, 
+                  fireId TEXT,
                   firstName TEXT, 
                   lastName TEXT, 
                   phone TEXT
@@ -92,14 +93,15 @@ const generateQrCodes = async (num) => {
 
 /**
  * createUser - Creates a user with specified parameters
+ * @param {String} fireId - Alphanumeric value correlating to the id of the user
  * @param {String} firstName 
  * @param {String} lastName 
  * @param {String} phone 
  */
-const createUser = async (firstName, lastName, phone) => {
+const createUser = async (fireId, firstName, lastName, phone) => {
   return new Promise(resolve => {
     db.serialize(() => {
-      db.run('INSERT INTO accounts (firstName,lastName,phone) VALUES (?,?,?)', [firstName,lastName, phone], (err) => {
+      db.run('INSERT INTO accounts (fireId, firstName,lastName,phone) VALUES (?,?,?,?)', [fireId, firstName,lastName, phone], (err) => {
         if(err) {
           return console.log("error creating user: "+err.message); 
         }
@@ -118,15 +120,16 @@ const getProfile = async (profileId) => {
   return new Promise(resolve => {
     var profile;
     db.serialize(() => {
-      db.get(`SELECT firstName, lastName, phone FROM accounts WHERE id = ?`, [profileId], (err, row) => {
+      db.get(`SELECT fireId, firstName, lastName, phone FROM accounts WHERE fireId = ?`, [profileId], (err, row) => {
         if(err)
-          console.log("error in getting profile: "+err);
+          console.log("error in getting profile: " + err);
         if(row == null){
           console.log("user does not exist");
         }
 
         console.log(row)
         profile = {
+          "fireId": row.fireId,
           "firstName": row.firstName,
           "lastName": row.lastName,
           "phone": row.phone
@@ -223,13 +226,14 @@ const getDonation = async (profileId) => {
 }
 
 const test = () => {
-    createUser("Berke","Lunstad","6518084290")
-    createDonationLinked("TestID", 1, "happy birthday")    
+  createUser("213jhkf", "Berke","Lunstad","6518084290")
+  createDonationLinked("21312", "TestID", 1, "happy birthday")    
 }
 
 test()
 
 module.exports = {
+  createUser,
   getProfile,
   getStatus,
   setProfile,

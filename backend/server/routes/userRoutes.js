@@ -4,6 +4,15 @@ const database = require("./../../database/database");
 const userRouter = express.Router()
 
 
+userRouter.route("/createuser")
+    .post((req, res) => {
+        const { fireId, firstName, lastName, phone } = req.body;
+        console.log(fireId, firstName, lastName, phone);
+        database.createUser(fireId, firstName, lastName, phone);
+        res.send("User created");
+    });
+
+
 userRouter.route('/profile/:userId')
   .get(async (req, res) => {
     var userId = req.params.userId;
