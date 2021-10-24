@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
     },
     appBar: {
         boxShadow: 'none',
-        marginTop: '20px'
+        marginTop: '50px'
     },
     heroContent: {
         
@@ -59,17 +59,17 @@ const useStyles = makeStyles((theme) => ({
         padding: '15px 25px',
         boxShadow: 'none',
         textTransform: 'none',
-        borderRadius: '5px',
+        borderRadius: '9px',
         backgroundColor: '#d9af00',
         textColor: 'black',
-        fontSize: '18px',
+        fontSize: '25px',
         '&:hover': {
             backgroundColor: '#e4c74c',
             boxShadow: 'none'
         }
     },
     hero: {
-        padding: '20vh 7%',
+        padding: '20vh 10vh',
         ['@media(max-width: 950px)'] : {
             
             textAlign: 'center'
@@ -89,15 +89,15 @@ const useStyles = makeStyles((theme) => ({
     image: {
         ['@media(min-width: 950px)'] : {
             position: 'absolute',
-            width: '40em'
+            width: '50em'
           },
         ['@media(max-width: 950px)'] : {
             
             position: 'relative',
             width: '25em'
           },
-        right: '6%',
-        bottom: '20vh',
+        right: '10vh',
+        bottom: '12vh',
     },
     signinlink: {
         '&:link': {
