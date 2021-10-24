@@ -1,4 +1,5 @@
 const sqlite3 = require('sqlite3').verbose();
+var uuid = require('uuid');
 
 // open database file
 let db = new sqlite3.Database('./database/donocode.db', sqlite3.OPEN_READWRITE, (err) => {
@@ -59,6 +60,33 @@ const getStatus = async (donationId) => {
       })
     })
     return resolve(qrStatus);
+  })
+}
+
+/**
+ * Generate num number of qrCodes
+ * @param {*} num  -- an integer
+ * @returns 
+ */
+const generateQrCodes = async (num) => {
+  return new Promise(resolve => {
+
+    var qrIds = []
+    for (var i = 0; i < num; i++) {
+      var qrId = uuid.v4();
+      db.serialize(() => {
+        db.run(`INSERT INTO qrTable (qrId) VALUES (?, ?)`, [qrId], (err) => {
+          if(err) {
+            return console.log("error creating user: "+ err.message); 
+          }
+          // get the last insert id
+          console.log(`A row has been inserted with rowid ${this.lastID}`);
+        });
+      })
+      qrIds.push(qrId)
+    }
+
+    return resolve(qrIds);
   })
 }
 

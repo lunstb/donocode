@@ -24,6 +24,12 @@ qrRouter.route('/register')
     });
   })
 
+qrRouter.route('/generatecode:number')
+  .get(async (req, res) => {
+    var num = req.params.number;
+    res.send(await database.generateQrCode(num));
+  })
+
 qrRouter.route('/getstatus:donationId')
   .get(async (req, res) => {
     var donationId = req.params.donationId;

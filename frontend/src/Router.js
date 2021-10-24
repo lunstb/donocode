@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import {Route, Switch} from 'react-router-dom'
 import Home from './components/Home'
 import Login from './components/Login'
@@ -8,6 +8,8 @@ import { AuthProvider } from './AuthContext'
 import PrivateRoute from './components/PrivateRoute'
 import CreateDonoCode from './components/CreateDonoCode'
 import { PrintContent } from './pages/PrintComponents'
+import Settings from './components/Settings'
+import firebase from './firebase'
 
 const Router = () => {
     return (<div>
