@@ -3,24 +3,27 @@ import { makeStyles } from '@material-ui/core/styles'
 import { AppBar, Button, Container, TextField, Typography } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { Toolbar } from '@material-ui/core';
-import backArrow from '../images/backArrow.png';
+import backArrow from '../images/backArrow.svg';
 import clsx from 'clsx'
+import { ComponentToPrint } from './ComponentToPrint';
+import { PrintContent } from './PrintComponents';
 
 const useStyles = makeStyles((theme) => ({
     
-    title: {
+  title: {
 
-        '&:link': {
-            textDecoration: 'none',
-            color: '#51323C'
-        },
-        '&:visited': {
-            textDecoration: 'none',
-            color: '#51323C'
-        },
+    '&:link': {
+        textDecoration: 'none',
         color: '#51323C'
-
     },
+    '&:visited': {
+        textDecoration: 'none',
+        color: '#51323C'
+    },
+    color: '#51323C',
+    margin: "0 20px"
+
+},
     image: {
       marginRight: "7px"
     },
@@ -74,6 +77,7 @@ const useStyles = makeStyles((theme) => ({
       marginTop: "25px",
       marginRight: "30px",
       marginLeft: "40%",
+      marginBottom: "100px",
       width: "20%",
       '&:hover': {
         background: '#C99F00',
@@ -100,11 +104,13 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     image: {
-      height: '40px',
-      width: '40px'
+      marginTop: '5px',
+      marginRight: '5px',
+      height: '25px',
+      width: '25px'
     },
     pageContent: {
-      marginLeft: "5vw",
+      marginLeft: "80px",
       marginRight: "50px",
     },
     verticalAlign: {
@@ -134,22 +140,34 @@ const useStyles = makeStyles((theme) => ({
       },
     },
     toolbar: {
-        backgroundColor: '#fefbef',
-    },
+      backgroundColor: '#fefbef',
+      padding: '0'
+  },
     appBar: {
       boxShadow: 'none',
-      marginLeft: '4vw',
-      marginTop: '4vw'
-  },
+      marginTop: '50px'
+    },
+    logo: {
+      padding: '0 0 0 10vh',
+      margin: "0 20px 0 0",
+      fontWeight: '900!important',
+      color: '#d9af00',
+      '&:link': {
+          textDecoration: 'none',
+          color: '#d9af00'
+      },
+      '&:visited': {
+          textDecoration: 'none',
+          color: '#d9af00'
+      },
+    },
     textContent: {
       margin: '60px 0'
     },
     resize:{
       fontSize:"4vh"
     },
-    messageResize:{
-      height: "7px"
-    },
+    
     attachMessage:{
       backgroundColor: "#FFF",
       marginBottom: "6px",
@@ -160,12 +178,16 @@ const useStyles = makeStyles((theme) => ({
       display: "flex",
       justifyContent: "space-between"
     },
+    settingsButton: {
+      position: "absolute",
+      right: "5vw"
+    },
     alignHorizontal:{
       display: "flex",
       justifyContent: "space-between"
     },
     messageField:{
-      marginTop: "12px",
+      marginTop: "2px",
       marginRight: "8px"
     },
     floatLeft:{
@@ -174,10 +196,10 @@ const useStyles = makeStyles((theme) => ({
   }));
   
 
-function HowManyCodes(classes, currentPage, setCurrentPage, qrCodeNum, setQrCodeNum, messages, setMessages){
+function HowManyCodes(classes, currentPage, setCurrentPage, qrCodeNum, setQrCodeNum, messages, setMessages, qrCodes, setQrCodes){
   return (
     <div>
-      <Link className={classes.title} to="/"> 
+      <Link className={classes.title} to="/dashboard"> 
         <div className={clsx(classes.alignHorizontal,classes.floatLeft)}>
           <img src={backArrow} className={classes.image}/>
           <h6 className={classes.h6}>Back</h6>
@@ -200,7 +222,16 @@ function HowManyCodes(classes, currentPage, setCurrentPage, qrCodeNum, setQrCode
               for(let i = 0; i<e.target.value; ++i){
                 messages.push("Donated Item")
               }
-            }}
+
+              // make a fetch request to the server to get the qr codes
+              fetch(`http://localhost:3001/api/qr/generatecode/${e.target.value}`) // replace with http://donocode.com/qrcode/generatecode
+                  .then(response => response.json())
+                  .then(data => {
+                    setQrCodes(data)
+                  })
+                  .catch(error => console.log(error));
+              }
+            }
           />
         </div>
         
@@ -278,17 +309,36 @@ function AttachMessage(classes, currentPage, setCurrentPage, qrCodeNum, messages
   )
 }
 
+function PrintComponent(classes, currentPage, setCurrentPage, qrCodes){
+  // let qrCodeArray = [...qrCodes];
+  // qrCodes.forEach(v => qrCodeArray.push(v));  
+  // console.log(qrCodeArray)
+  console.log(qrCodes)
+  return <div>
+    <Button onClick={()=>{setCurrentPage(currentPage-1)}}className={classes.backButton} disableElevation>
+          <div className={clsx(classes.alignHorizontal,classes.floatLeft)}>
+          <img src={backArrow} className={classes.image}/>
+          <h6 className={classes.h6}>Back</h6>
+        </div> 
+      </Button>
+      <PrintContent
+        qrCodes={qrCodes}
+      />
+  </div>
+}
+
 export default function CreateDonoCode(){
     const classes = useStyles()
     const [currentPage, setCurrentPage] = useState(0);
     const [qrCodeNum, setQrCodeNum] = useState(1);
     const [linkToAccount, setLinkToAccount] = useState(false);
     const [messages, setMessages] = useState([])
+    const [qrCodes, setQrCodes] = useState()
 
     let page;
     switch (currentPage) {
       case 0:
-        page = HowManyCodes(classes, currentPage, setCurrentPage, qrCodeNum, setQrCodeNum, messages, setMessages)
+        page = HowManyCodes(classes, currentPage, setCurrentPage, qrCodeNum, setQrCodeNum, messages, setMessages, qrCodes, setQrCodes)
         break;
       case 1:
         page = LinkToAccount(classes, currentPage, setCurrentPage, linkToAccount, setLinkToAccount)
@@ -297,31 +347,32 @@ export default function CreateDonoCode(){
         page = AttachMessage(classes, currentPage, setCurrentPage, qrCodeNum, messages, setMessages)
         break;
       default:
+        page = PrintComponent(classes, currentPage, setCurrentPage, qrCodes)
         break;
     }
-    
+    console.log(qrCodes)
     return (
-      <div>
+      <span>
         <AppBar position="static" className={classes.appBar}>
-            <Toolbar className={classes.toolbar}>
-                <Link className={clsx(classes.title, classes.logo)} to="/">
-                    <Typography aria-label="Home" variant="h4">
-                        <b style={{fontWeight: '900'}}>DonoCode</b>
-                    </Typography>
-                </Link>
-                <Link className={classes.title} to="/settings">
-                    <Typography aria-label="Home" variant="h6">
-                        Setting
-                    </Typography>
-                </Link>
-            </Toolbar>
-        </AppBar>
+          <Toolbar className={classes.toolbar}>
+              <Link className={clsx(classes.title, classes.logo)} to="/dashboard">
+                  <Typography aria-label="Home" variant="h4">
+                      <b style={{fontWeight: '900'}}>DonoCode</b>
+                  </Typography>
+              </Link>
+              <Link className={clsx(classes.title, classes.settingsButton)} to="/settings">
+                  <Typography aria-label="Home" variant="h6">
+                      Settings
+                  </Typography>
+              </Link>
+          </Toolbar>
+      </AppBar>
         <div className={classes.pageContent}>
           <div className={classes.verticalAlign}>
             {page}
           </div>
         </div>
-      </div>
+      </span>
     
     );
 }
