@@ -15,7 +15,7 @@ function DonorGreeting() {
                 onChange={(e) => setPhone(e.target.value)}
             />
             <Link to={{
-                pathname: "/donor-add-sms",
+                pathname: "/donor/addmessage",
                 state: { 
                     qrId,
                     phone
