@@ -111,4 +111,3 @@ export const ComponentToPrint = React.forwardRef((props, ref) => {
 });
 
 export default useStyles;
-
