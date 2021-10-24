@@ -101,15 +101,15 @@ const useStyles = makeStyles((theme)=> ({
     image: {
         ['@media(min-width: 950px)'] : {
             position: 'absolute',
-            width: '50em'
+            width: '46em'
           },
         ['@media(max-width: 950px)'] : {
             
             position: 'relative',
             display: 'none'
           },
-        right: '10vh',
-        bottom: '12vh',
+          right: '10%',
+          bottom: '12%',
     },
     buttonFill: {
         width: '33vw', 

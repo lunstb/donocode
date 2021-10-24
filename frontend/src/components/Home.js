@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 import { Toolbar } from '@material-ui/core';
 import clsx from 'clsx'
 import homeImage from '../images/HomeTest.svg'
-import processImage from '../images/Process.svg'
 import Stage1 from '../images/Stage1.svg'
 import Stage2 from '../images/Stage2.svg'
 import Stage3 from '../images/Stage3.svg'
@@ -168,15 +167,37 @@ const useStyles = makeStyles((theme) => ({
         fontSize: '20px'
     },
     abouttitle: {
-        fontSize: '40px',
+        // fontSize: '4.5em', 
+        fontSize: '60px',
+        fontWeight:'900',
         marginLeft: '10vh',
         paddingTop: '100px',
         ['@media(max-width: 950px)'] : {
-            
-            marginLeft: '0'
+            margin: '80px',
+            // marginLeft: '0'
           },
     },
     faq: {
+        color: '#51323C',
+        fontSize: '4.5em',
+        fontWeight:'900',
+        margin: '10vh',
+        // paddingTop: '100px ',
+
+        // ['@media(max-width: 950px)'] : {
+            
+        //     marginLeft: '0'
+        //   },
+
+    },
+    faqinfo: {
+        fontSize: '20px',
+
+        fontWeight:'300',
+    },
+    faqsubtitle: {
+        fontSize: '25px',
+        
 
     }
   }));
@@ -237,11 +258,23 @@ export default function Home(){
         <p className={classes.paraAbout}>Receive an update through text and on your “My Donations” dashboard once your donation has been recieved.</p></div>
         </section>
         </div>
-        <div className={classes.faq} id="faq">
+    </div>
+    </div>
+    
 
-        </div>
+    <div className={classes.faq} id="faq">
+
+        <h2 style={{margin: '0', marginBottom: '40px', fontSize: '60px'}}><b>Frequently Asked Questions</b></h2>
+        <h3 className={classes.faqsubtitle}>What donations can I use DonoCode with?</h3>
+        <p className={classes.faqinfo}>DonoCode can be used with any type of donation! From clothing and household items to food and financial donations, any item can be tracked with DonoCode.</p>
+        <h3 className={classes.faqsubtitle}>How will I receive a message when my donation item is received?</h3>
+        <p className={classes.faqinfo}>When a donation item is received, the recipient will scan the DonoCode. The recipient will be able to view your personal message and an update that your donation has been received will be sent as a text to your number. The recipient may also send an optional thank you message along with the update. Your “My Donations” dashboard will automatically be updated with this status update.</p>
+        <h3 className={classes.faqsubtitle}>Will my donation receipient still be able to message me muiltiple times?</h3>
+        <p className={classes.faqinfo}>No. To avoid possible cases of unwanted spam messages, once a recipient scans a DonoCode, they will have one chance to send a message. Once they do so, DonoCode will no longer allow for messages to the donor. </p>
+        <h3 className={classes.faqsubtitle}>Who created this really really really cool application?</h3>
+        <p className={classes.faqinfo}>A group of 5 Vanderbilt sophomores got together for HackDuke and discovered an amazing idea that had not been created before. Wanting to encourage both donor and donation recipients alike, we created an application that would make giving donations a little bit more special :)</p>
     </div>
-    </div>
+    
     
     </span>
 
