@@ -4,7 +4,6 @@ import { AppBar, Button, Container, Typography } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { Toolbar } from '@material-ui/core';
 import clsx from 'clsx'
-import homeImage from '../images/Homepage.png'
 
 const useStyles = makeStyles((theme) => ({
     
