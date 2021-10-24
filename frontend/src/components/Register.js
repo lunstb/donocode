@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import firebase from '../../firebase';
+import firebase from '../firebase';
+import { useAuth } from '../AuthContext';
+import { useHistory } from 'react-router-dom';
 
 const Register = () => {
     let [firstName, setFirstName] = useState("");
@@ -8,18 +10,30 @@ const Register = () => {
     let [email, setEmail] = useState();
     let [password, setPassword] = useState();
     let [confirmPassword, setConfirmPassword] = useState();
+    let [isLoading, setIsLoading] = useState(false);
+    let [error, setError] = useState("");
+    const history = useHistory();
+
+    const { signup } = useAuth();
     
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        if(password === confirmPassword){
-            firebase.auth().createUserWithEmailAndPassword(email, password)
-            .then(res => console.log(res))
-            .catch(err => console.log(err))
-        } else {
-            alert("Passwords do not match");
-        }  
+        if(password !== confirmPassword){
+            return setError("Passwords do not match");
+        }
+        try {
+            setError("");
+            setIsLoading(true);
+            await signup(email, password);
+            history.push("/");
+        } catch {
+            setError("Error signing up");
+        }
+        setIsLoading(false);
     }
     
+    // show the error in a material UI alert below
+
     return (
         <div>    
         <h2>Create your DonoPal</h2>
@@ -69,7 +83,7 @@ const Register = () => {
                         placeholder="Confirm Password"
                     />
                 </div>
-                <button type="submit">Create account</button>
+                <button disabled={isLoading} type="submit">Create account</button>
             </form>
         </div>
     )
