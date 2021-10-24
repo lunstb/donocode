@@ -7,8 +7,8 @@ import { ComponentToPrint } from './ComponentToPrint';
 // import useStyles from './PrintComponents.styles';
 
 const useStyles = makeStyles((theme)=> ({ 
+ 
   printButton: {
-    position: 'relative',
     backgroundColor: "#D9AF00",
     color: "white",
     border: "none",
@@ -17,9 +17,12 @@ const useStyles = makeStyles((theme)=> ({
     fontSize: "20px",
     cursor: "pointer",
     zIndex: "2",
-    marginLeft: "20px",
+    bottom: "50px",
+    marginLeft: "5%",
     marginBottom: "20px",
-  },
+    
+    // left:"9.08%"
+  }
 
 }));
 
@@ -35,14 +38,18 @@ export const PrintContent = () => {
   });
   
   return (
-    <div style={{display: "block"}}>
-      <div>
+    <div >
+      <div className={classes.printableContainer}>
       <ComponentToPrint ref={componentRef}/>
       </div>
-      <div>
-      
+      {/* <div> */}
+      <br/>
+      <div className={classes.buttonDiv}>
+      <br/>
       <button className={classes.printButton} onClick={handlePrint}>Print this out!</button>
       </div>
+      
+      {/* </div> */}
     </div>
   );
 };

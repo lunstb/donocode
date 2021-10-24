@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme)=> ({
     textAlign: "center",
     border: "3px dashed #000000",
     boxSizing: "border-box",
-    width: "188px",
+    width: "182px",
     height: "190px",
     fontSize: "8px",
     float: "left",
@@ -19,9 +19,6 @@ const useStyles = makeStyles((theme)=> ({
   },
   compToPrint: {
     border: "#808080",
-    position: "relative",
-    display: "grid",
-    gridTemplateColumns: "auto auto auto auto auto auto auto",
     textAlign: "center",
     marginTop: "50px",
     marginBottom: "0px",
@@ -42,16 +39,19 @@ const useStyles = makeStyles((theme)=> ({
   titleLogo: {
     color: "#D9AF00",
     position: "relative",
+    fontFamily: "Nunito",
     fontWeight: "800",
     fontSize: "40px",
     lineHeight: "41px",
   },
+
   center: {
     textAlign: "center",
   },
 
   instructions: {
     fontSize: "18px",
+    fontFamily: "Nunito",
   }
   }))
 
@@ -62,7 +62,7 @@ export const ComponentToPrint = React.forwardRef((props, ref) => {
   const classes = useStyles()
   
   // declare a qrCodes array to hold the qr codes
-  var qrCodes  = ['1234', '5455', '1343', '134324', '13434', '13243', '1342']; // todo: empty array during actual run
+  var qrCodes  = ['1234', '5455', '1343', '134324']; // todo: empty array during actual run
 
   // make a fetch request to the server to get the qr codes
   fetch("http://localhost:3000/generatecode") // replace with http://donocode.com/qrcode/generatecode
@@ -77,18 +77,18 @@ export const ComponentToPrint = React.forwardRef((props, ref) => {
     
   
   return (
-    <div className={classes.toPrintPage} >
+    <div className={classes.toPrintPage} ref={ref}>
       <div className={classes.instructions}>
         <h1 className={classes.titleLogo}>DonoCode</h1>
         <h2>Instructions</h2>
-        <p>Cut out the DonoCodes along the dotted line</p>
+        <p>Cut out the DonoCodes along the dotted line.</p>
         <p><b>Not linked to your account: </b>Distribute a DonoCode to any donor would like to keep
-        track of their donation</p>
+        track of their donation.</p>
         <p><b>Linked to your account: </b>Tape the appropriate DonoCode on any item you would like to keep track of. When a recipient 
         recieves your donated item, they will be able to see your personalized message as well as the option to send a thank you message back. </p>
         <p>View the status of your donations in the “My Donations” dashboard. </p>
       </div>
-      <div className={classes.compToPrint} ref={ref}>
+      <div className={classes.compToPrint}>
         {qrCodes.map((item, index) => {
           return (
             <div  className={classes.qrcode}>
