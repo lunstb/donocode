@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import {Route, Switch} from 'react-router-dom'
+import CreateDonoCode from './core/CreateDonoCode'
 import Home from './core/Home'
 import Settings from './core/Settings'
 import firebase from './firebase'
@@ -22,6 +23,7 @@ const Router = () => {
         <Switch> 
           <Route exact path="/" component={Home}/>
           <Route exact path="/settings" component={Settings}/>
+          <Route exact path="/createdonocode" component={CreateDonoCode}/>
         </Switch>   
       </div>)
 }
