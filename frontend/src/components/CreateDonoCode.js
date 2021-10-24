@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom';
 import { Toolbar } from '@material-ui/core';
 import backArrow from '../images/backArrow.svg';
 import clsx from 'clsx'
+import { ComponentToPrint } from './ComponentToPrint';
+import { PrintContent } from './PrintComponents';
 
 const useStyles = makeStyles((theme) => ({
     
@@ -194,7 +196,7 @@ const useStyles = makeStyles((theme) => ({
   }));
   
 
-function HowManyCodes(classes, currentPage, setCurrentPage, qrCodeNum, setQrCodeNum, messages, setMessages){
+function HowManyCodes(classes, currentPage, setCurrentPage, qrCodeNum, setQrCodeNum, messages, setMessages, qrCodes, setQrCodes){
   return (
     <div>
       <Link className={classes.title} to="/dashboard"> 
@@ -220,7 +222,16 @@ function HowManyCodes(classes, currentPage, setCurrentPage, qrCodeNum, setQrCode
               for(let i = 0; i<e.target.value; ++i){
                 messages.push("Donated Item")
               }
-            }}
+
+              // make a fetch request to the server to get the qr codes
+              fetch(`http://localhost:3001/api/qr/generatecode/${e.target.value}`) // replace with http://donocode.com/qrcode/generatecode
+                  .then(response => response.json())
+                  .then(data => {
+                    setQrCodes(data)
+                  })
+                  .catch(error => console.log(error));
+              }
+            }
           />
         </div>
         
@@ -298,17 +309,36 @@ function AttachMessage(classes, currentPage, setCurrentPage, qrCodeNum, messages
   )
 }
 
+function PrintComponent(classes, currentPage, setCurrentPage, qrCodes){
+  // let qrCodeArray = [...qrCodes];
+  // qrCodes.forEach(v => qrCodeArray.push(v));  
+  // console.log(qrCodeArray)
+  console.log(qrCodes)
+  return <div>
+    <Button onClick={()=>{setCurrentPage(currentPage-1)}}className={classes.backButton} disableElevation>
+          <div className={clsx(classes.alignHorizontal,classes.floatLeft)}>
+          <img src={backArrow} className={classes.image}/>
+          <h6 className={classes.h6}>Back</h6>
+        </div> 
+      </Button>
+      <PrintContent
+        qrCodes={qrCodes}
+      />
+  </div>
+}
+
 export default function CreateDonoCode(){
     const classes = useStyles()
     const [currentPage, setCurrentPage] = useState(0);
     const [qrCodeNum, setQrCodeNum] = useState(1);
     const [linkToAccount, setLinkToAccount] = useState(false);
     const [messages, setMessages] = useState([])
+    const [qrCodes, setQrCodes] = useState()
 
     let page;
     switch (currentPage) {
       case 0:
-        page = HowManyCodes(classes, currentPage, setCurrentPage, qrCodeNum, setQrCodeNum, messages, setMessages)
+        page = HowManyCodes(classes, currentPage, setCurrentPage, qrCodeNum, setQrCodeNum, messages, setMessages, qrCodes, setQrCodes)
         break;
       case 1:
         page = LinkToAccount(classes, currentPage, setCurrentPage, linkToAccount, setLinkToAccount)
@@ -317,9 +347,10 @@ export default function CreateDonoCode(){
         page = AttachMessage(classes, currentPage, setCurrentPage, qrCodeNum, messages, setMessages)
         break;
       default:
+        page = PrintComponent(classes, currentPage, setCurrentPage, qrCodes)
         break;
     }
-    
+    console.log(qrCodes)
     return (
       <span>
         <AppBar position="static" className={classes.appBar}>

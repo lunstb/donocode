@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from 'react'
 import QRCode from "react-qr-code";
 import { makeStyles } from "@material-ui/core";
 
@@ -61,19 +61,12 @@ export const ComponentToPrint = React.forwardRef((props, ref) => {
 
   const classes = useStyles()
   
+  console.log(Array.from(props.qrCodes))
   // declare a qrCodes array to hold the qr codes
-  var qrCodes  = ['1234', '5455', '1343', '134324']; // todo: empty array during actual run
+  
 
-  // make a fetch request to the server to get the qr codes
-  fetch("http://localhost:3000/generatecode") // replace with http://donocode.com/qrcode/generatecode
-    .then(response => response.json())
-    .then(data => {
-      // loop through the qr codes and push them to the qrCodes array
-      for (var i = 0; i < data["qrCodes"].length; i++) {
-        qrCodes.push(data["qrCodes"][i]);
-      }
-    })
-    .catch(error => console.log(error));
+  
+  
     
   
   return (
@@ -89,7 +82,8 @@ export const ComponentToPrint = React.forwardRef((props, ref) => {
         <p>View the status of your donations in the “My Donations” dashboard. </p>
       </div>
       <div className={classes.compToPrint}>
-        {qrCodes.map((item, index) => {
+        {Array.from(props.qrCodes).map((item, index) => {
+          console.log(item,index)
           return (
             <div  className={classes.qrcode}>
               <p><b>DonoCode</b></p>
