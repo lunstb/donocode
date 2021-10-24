@@ -3,7 +3,7 @@ import {Route, Switch} from 'react-router-dom'
 import Home from './core/Home'
 import Login from './components/Login'
 import Register from './components/Register'
-import Profile from './components/Profile'
+import Settings from './components/Settings'
 import { AuthProvider } from './AuthContext'
 import PrivateRoute from './components/PrivateRoute'
 
@@ -14,7 +14,7 @@ const Router = () => {
           <Route exact path="/" component={Home}/>
           <Route path="/signin" component={Login}/>
           <Route path="/signup" component={Register}/>
-          <PrivateRoute path="/profile" component={Profile}/>
+          <PrivateRoute path="/settings" component={Settings}/>
         </Switch>   
       </AuthProvider>
       </div>)
