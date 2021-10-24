@@ -1,8 +1,140 @@
 import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
+import { AppBar, Toolbar, Button, Container, makeStyles, Typography } from '@material-ui/core';
 import { useAuth } from '../AuthContext';
+import clsx from 'clsx';
+import homeImage from '../images/Homepage.png'
+
+const useStyles = makeStyles((theme)=> ({
+    title: {
+
+        '&:link': {
+            textDecoration: 'none',
+            color: '#51323C'
+        },
+        '&:visited': {
+            textDecoration: 'none',
+            color: '#51323C'
+        },
+        color: '#51323C',
+        margin: "0 20px"
+
+    },
+    logo: {
+        padding: '0 0 0 10vh',
+        margin: "0 20px 0 0",
+        fontWeight: '900!important',
+        color: '#d9af00',
+        '&:link': {
+            textDecoration: 'none',
+            color: '#d9af00'
+        },
+        '&:visited': {
+            textDecoration: 'none',
+            color: '#d9af00'
+        },
+    },
+    
+    toolbar: {
+        backgroundColor: '#fefbef',
+        padding: '0'
+    },
+    appBar: {
+        boxShadow: 'none',
+        marginTop: '50px'
+    },
+    input: {
+        background: 'transparent',
+        border: '1px solid #9D8A8B',
+        borderRadius: '5px',
+        padding: '10px 15px',
+        width: '33vw',
+        margin: '10px 0',
+        fontFamily: 'inherit',
+        fontSize: '18px',
+        ['@media(max-width: 950px)'] : {
+            
+            width: '400px',
+          },
+        
+    },
+    login: {
+        marginTop: '80px',
+        marginLeft: '10vh',
+        width: '33vw',
+        ['@media(max-width: 950px)'] : {
+            
+            marginLeft:' 0',
+            textAlign: 'center'
+          },
+    },
+    signup: {
+        color: '#d9af00',
+        '&:link': {
+            textDecoration: 'none',
+            color: '#d9af00'
+        },
+        '&:visited': {
+            textDecoration: 'none',
+            color: '#d9af00'
+        },
+    },
+    register: {
+        fontWeight: '600',
+        margin: '5px 0 10px 0',
+        fontSize: '15px'
+    },
+    signin: {
+        border: '0 solid #9D8A8B',
+        backgroundColor: '#d9af00',
+        borderRadius: '5px',
+        fontFamily: 'inherit',
+        padding: "15px 70px",
+        "&:hover": {
+            cursor: "pointer",
+            backgroundColor: '#e4c74c',
+        },
+        fontWeight: '800',
+        fontSize: '20px',
+        margin: '40px'
+    },
+    image: {
+        ['@media(min-width: 950px)'] : {
+            position: 'absolute',
+            width: '50em'
+          },
+        ['@media(max-width: 950px)'] : {
+            
+            position: 'relative',
+            display: 'none'
+          },
+        right: '10vh',
+        bottom: '12vh',
+    },
+    buttonFill: {
+        width: '33vw', 
+        textAlign: 'center',
+        ['@media(max-width: 950px)'] : {
+            
+            width: '100vw',
+          },
+    },
+    signintitle: {
+        ['@media(max-width: 950px)'] : {
+            width: '100vw'
+          },
+    },
+    formstuff: {
+        ['@media(max-width: 950px)'] : {
+            width: '100vw',
+        
+          },
+    },
+    })
+);
 
 const Login = () => {
+    const classes = useStyles();
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
     let [isLoading, setIsLoading] = useState(false);
@@ -26,29 +158,47 @@ const Login = () => {
     
     return (
         <div>    
-        <h2>Login</h2>
-        <form onSubmit={handleSubmit}>
-            <input
-                type="text"
-                onChange={({ target }) =>     
-                    setEmail(target.value)}
-                placeholder="Email"
-            />
-            <br />
-            <input
-                type="password"
-                onChange={({ target}) => 
-                    setPassword(target.value)}
-                placeholder="Password"
-            />
-            <br />
-            <button disabled={isLoading} type="submit">
-                Sign in
-            </button>
-        </form>
-        <div>
-            Don't have an account? <Link to="/signup">Create one today!</Link>
+        <AppBar position="static" className={classes.appBar}>
+        <Toolbar className={classes.toolbar}>
+            <Link className={clsx(classes.title, classes.logo)} to="/">
+                <Typography aria-label="Home" variant="h4">
+                    <b style={{fontWeight: '900'}}>DonoCode</b>
+                </Typography>
+            </Link>
+        </Toolbar>
+    </AppBar>
+        <div className={classes.login}>
+            <h2 className={classes.signintitle}>Sign In</h2>
+            <form onSubmit={handleSubmit} className={classes.formstuff}>
+                <input
+                    type="text"
+                    onChange={({ target }) =>     
+                        setEmail(target.value)}
+                    placeholder="Email"
+                    className={classes.input}
+                />
+                <br />
+                <input
+                    type="password"
+                    onChange={({ target}) => 
+                        setPassword(target.value)}
+                    placeholder="Password"
+                    className={classes.input}
+                />
+                <br />
+                <div className={classes.register}>
+                Don't have an account? <Link to="/signup" className={classes.signup}><b style={{fontWeight: '800'}}>Create one today!</b></Link>
+            </div>
+            <div className={classes.buttonFill}>
+                <button className={classes.signin} disabled={isLoading} type="submit">
+                    <b>Sign in</b>
+                </button>
+            </div>
+            </form>
         </div>
+        <img src={homeImage} className={classes.image}/>
+        
+        
         </div>
     )
 };

@@ -56,20 +56,20 @@ const useStyles = makeStyles((theme) => ({
         color: '#51323C'
     },
     login: {
-        padding: '15px 25px',
+        padding: '15px 30px',
         boxShadow: 'none',
         textTransform: 'none',
         borderRadius: '9px',
         backgroundColor: '#d9af00',
         textColor: 'black',
-        fontSize: '25px',
+        fontSize: '23px',
         '&:hover': {
             backgroundColor: '#e4c74c',
             boxShadow: 'none'
         }
     },
     hero: {
-        padding: '20vh 10vh',
+        padding: '25vh 10vh 20vh 10vh',
         ['@media(max-width: 950px)'] : {
             
             textAlign: 'center'
@@ -135,7 +135,7 @@ export default function Home(){
         </Toolbar>
     </AppBar>
     <div className={classes.hero}>
-        <Typography variant="h2" className={classes.heroContent}><b style={{fontWeight: '800'}}>Track your impact<br/>with DonoCode!</b></Typography>
+        <Typography variant="h3" className={classes.heroContent}><b style={{fontWeight: '800'}}>Track your impact<br/>with DonoCode!</b></Typography>
         <Link to="/signin" className={classes.signinlink}>
         <Button variant="contained" className={classes.login}><b>Create DonoCode</b></Button>
         </Link>
