@@ -11,7 +11,7 @@ function PostScanPages() {
             if (qrStatus === 0)
                 return <Redirect to={"/donor/greeting/"+qrId}/>
             else if (qrStatus === 1)
-                return <Redirect to={"/recipient/greeting"+qrId}/>
+                return <Redirect to={"/recipient/addmessage"+qrId}/>
             else if (qrStatus === 2)
                 return <Redirect to={"/"}/>
         })
