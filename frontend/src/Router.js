@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import {Route, Switch} from 'react-router-dom'
 import Home from './core/Home'
+import Settings from './core/Settings'
 import firebase from './firebase'
 
 const Router = () => {
@@ -20,6 +21,7 @@ const Router = () => {
     return (<div>
         <Switch> 
           <Route exact path="/" component={Home}/>
+          <Route exact path="/settings" component={Settings}/>
         </Switch>   
       </div>)
 }
