@@ -1,6 +1,5 @@
 import React, { useRef } from 'react';
 import { useReactToPrint } from 'react-to-print';
-import { isClassExpression } from 'typescript';
 import { makeStyles } from "@material-ui/core";
 
 import { ComponentToPrint } from './ComponentToPrint';

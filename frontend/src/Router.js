@@ -8,7 +8,6 @@ import { AuthProvider } from './AuthContext'
 import PrivateRoute from './components/PrivateRoute'
 import CreateDonoCode from './components/CreateDonoCode'
 import { PrintContent } from './pages/PrintComponents'
-import Settings from './components/Settings'
 import firebase from './firebase'
 
 const Router = () => {
