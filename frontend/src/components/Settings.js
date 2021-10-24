@@ -4,6 +4,8 @@ import { AppBar, Button, Container, TextField, Typography } from '@material-ui/c
 import { Link } from 'react-router-dom';
 import { Toolbar } from '@material-ui/core';
 import clsx from 'clsx'
+import { useAuth } from "../AuthContext";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     h1: {
@@ -101,6 +103,23 @@ const useStyles = makeStyles((theme) => ({
   
 
 export default function Settings(){
+    const [error, setError] = useState(null);
+    const { currentUser, signout } = useAuth();
+    const [isLoading, setIsLoading] = useState(false);
+    const history = useHistory();
+
+    const handleSignout = async () => {
+        setError("");
+        try {
+            setIsLoading(true);
+            await signout();
+            setIsLoading(false);
+            history.push("/signin");
+        } catch {
+            setError("Error signing out");
+        }
+    };
+
     const classes = useStyles()
     
     return (
@@ -155,8 +174,7 @@ export default function Settings(){
           </div>
         </div>
         <Button className={classes.saveButton} variant="contained" disableElevation>Save</Button>
-        <Button className={classes.logoutButton}  disableElevation>Log Out</Button>
+        <Button className={classes.logoutButton} disabled={isLoading} disableElevation onClick={handleSignout}>Log Out</Button>
     </div>
     );
 }
-

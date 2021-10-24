@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import { Helmet } from 'react-helmet';
 import { AppBar, Button, Container, TextField, Typography } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { Toolbar } from '@material-ui/core';
@@ -22,10 +21,49 @@ const useStyles = makeStyles((theme) => ({
         color: '#51323C'
 
     },
+    image: {
+      marginRight: "7px"
+    },
     h1: {
-      fontSize: "5vh"
+      fontSize: "4vh"
+    },
+    logo: {
+      padding: '0 0 0 10vh',
+      margin: "0 20px 0 20vw",
+      fontWeight: '900!important',
+      color: '#d9af00',
+      '&:link': {
+          textDecoration: 'none',
+          color: '#d9af00'
+      },
+      '&:visited': {
+          textDecoration: 'none',
+          color: '#d9af00'
+      },
+    },
+    h6: {
+      fontSize: "20px",
+      fontWeight: 'normal',
+      margin: "5px 0",
+      textTransform: 'none',
+      color: "#51323C",
     },
     nextButton: {
+      backgroundColor: "#D9AF00",
+      fontSize: '3vh',
+      fontFamily: 'Nunito',
+      fontWeight: 'bold',
+      color: "#51323C",
+      textTransform: 'none',
+      borderRadius: "8px",
+      marginTop: "25px",
+      marginRight: "30px",
+      width: "13%",
+      '&:hover': {
+        background: '#C99F00',
+      },
+    },
+    createDonoCodes: {
       backgroundColor: "#D9AF00",
       fontSize: '4vh',
       fontFamily: 'Nunito',
@@ -35,10 +73,12 @@ const useStyles = makeStyles((theme) => ({
       borderRadius: "8px",
       marginTop: "25px",
       marginRight: "30px",
-      width: "10%",
+      marginLeft: "40%",
+      width: "20%",
       '&:hover': {
         background: '#C99F00',
       },
+      height: "60px"
     },
     darkColor: {
       backgroundColor: "#51323C",
@@ -59,9 +99,16 @@ const useStyles = makeStyles((theme) => ({
             color: '#d9af00'
         },
     },
+    image: {
+      height: '40px',
+      width: '40px'
+    },
     pageContent: {
-      marginLeft: "50px",
-      marginRight: "50px"
+      marginLeft: "5vw",
+      marginRight: "50px",
+    },
+    verticalAlign: {
+      marginTop: "8vh"
     },
     grace: {
       marginTop: "12px",
@@ -70,6 +117,7 @@ const useStyles = makeStyles((theme) => ({
       width: "80px"
     },
     numberField: {
+      marginTop: "20px",
       marginRight: "20px",
       width: "20vw",
       marginBottom: "20px",
@@ -78,17 +126,26 @@ const useStyles = makeStyles((theme) => ({
           borderRadius: "10px",
       }
     },
+    backButton: {
+      marginBottom: "-30px",
+      height: "20px",
+      '&:hover': {
+        background: 'none',
+      },
+    },
     toolbar: {
         backgroundColor: '#fefbef',
     },
     appBar: {
-        boxShadow: 'none'
-    },
+      boxShadow: 'none',
+      marginLeft: '4vw',
+      marginTop: '4vw'
+  },
     textContent: {
-      marginBottom: '40px'
+      margin: '60px 0'
     },
     resize:{
-      fontSize:"6vh"
+      fontSize:"4vh"
     },
     messageResize:{
       height: "7px"
@@ -116,13 +173,6 @@ const useStyles = makeStyles((theme) => ({
     }
   }));
   
-function ItemInfo(classes){
-  return (
-    <div className={classes.itemInfo}>
-
-    </div>
-  )
-}
 
 function HowManyCodes(classes, currentPage, setCurrentPage, qrCodeNum, setQrCodeNum, messages, setMessages){
   return (
@@ -130,9 +180,7 @@ function HowManyCodes(classes, currentPage, setCurrentPage, qrCodeNum, setQrCode
       <Link className={classes.title} to="/"> 
         <div className={clsx(classes.alignHorizontal,classes.floatLeft)}>
           <img src={backArrow} className={classes.image}/>
-          <Typography aria-label="Home" variant="h6">
-            Back
-          </Typography>
+          <h6 className={classes.h6}>Back</h6>
         </div> 
       </Link>
       <br/>
@@ -170,11 +218,9 @@ function LinkToAccount(classes, currentPage, setCurrentPage, linkToAccount, setL
       
       <Button onClick={()=>{setCurrentPage(currentPage-1)}}className={classes.backButton} disableElevation>
           <div className={clsx(classes.alignHorizontal,classes.floatLeft)}>
-          <img src={backArrow} className={classes.image}/>
-          <Typography aria-label="Home" variant="h6">
-            Back
-          </Typography>
-        </div> 
+            <img src={backArrow} className={classes.image}/>
+            <h6 className={classes.h6}>Back</h6>
+          </div> 
       </Button>
       <div className={classes.textContent}>
         <h1 className={classes.h1}>Would you like to link these DonoCodes to your account?</h1>
@@ -194,7 +240,7 @@ function AttachMessage(classes, currentPage, setCurrentPage, qrCodeNum, messages
       <div key={index} className={classes.alignHorizontal}>
         <div className={classes.grace}>{index}</div>
         <div className={classes.alignHorizontal}>
-          <TextField id="outlined-basic" value={messages[index]} label="Item" variant="outlined" className={classes.messageField} 
+          <TextField id="outlined-basic" value={messages[index]} label="Item Name" variant="outlined" className={classes.messageField} 
           onChange={e => setMessages({...messages, [index]: e.target.value})}
           InputProps={{
             classes: {
@@ -212,16 +258,22 @@ function AttachMessage(classes, currentPage, setCurrentPage, qrCodeNum, messages
       <Button onClick={()=>{setCurrentPage(currentPage-1)}}className={classes.backButton} disableElevation>
           <div className={clsx(classes.alignHorizontal,classes.floatLeft)}>
           <img src={backArrow} className={classes.image}/>
-          <Typography aria-label="Home" variant="h6">
-            Back
-          </Typography>
+          <h6 className={classes.h6}>Back</h6>
         </div> 
       </Button>
-      <h2>Add a personal message with your DonoCode</h2>
-      <p>If you choose to not put a personalized message, your recipients will receive a default message. </p>
+      <div className={classes.textContent}>
+        <h2>Add a personal message with your DonoCode</h2>
+        <p>If you choose to not put a personalized message, your recipients will receive a default message. </p>
+        
+        <h3>Donations: ({qrCodeNum})</h3>
+        {rows}
+      </div>
       
-      <h3>Donations: ({qrCodeNum})</h3>
-      {rows}
+      <Button onClick={()=>{setCurrentPage(currentPage+1)}}className={classes.createDonoCodes} disableElevation>
+          <Typography aria-label="Home" variant="h6">
+            Create DonoCodes
+          </Typography>
+      </Button>
     </div>
   )
 }
@@ -253,8 +305,8 @@ export default function CreateDonoCode(){
         <AppBar position="static" className={classes.appBar}>
             <Toolbar className={classes.toolbar}>
                 <Link className={clsx(classes.title, classes.logo)} to="/">
-                    <Typography aria-label="Home" variant="h6">
-                        <b>DonoCode</b>
+                    <Typography aria-label="Home" variant="h4">
+                        <b style={{fontWeight: '900'}}>DonoCode</b>
                     </Typography>
                 </Link>
                 <Link className={classes.title} to="/settings">
@@ -265,7 +317,9 @@ export default function CreateDonoCode(){
             </Toolbar>
         </AppBar>
         <div className={classes.pageContent}>
-          {page}
+          <div className={classes.verticalAlign}>
+            {page}
+          </div>
         </div>
       </div>
     
