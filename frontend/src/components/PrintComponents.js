@@ -1,6 +1,8 @@
 import React, { useRef } from 'react';
 import { useReactToPrint } from 'react-to-print';
 import { makeStyles } from "@material-ui/core";
+import firebase from './../firebase'
+
 
 import { ComponentToPrint } from './ComponentToPrint';
 // import useStyles from './PrintComponents.styles';
@@ -35,7 +37,7 @@ export const PrintContent = React.forwardRef((props, ref) => {
     
     content: () => componentRef.current,
   });
-  console.log(Array.from(props.qrCodes))
+  console.log("linked to account", props.linkAccount,firebase.auth().currentUser.uid)
   return (
     <div >
       <div className={classes.printableContainer}>
@@ -50,7 +52,7 @@ export const PrintContent = React.forwardRef((props, ref) => {
         for(let i = 0; i<props.qrCodes.length; ++i){
           donations[i] = {
             "qrId": props.qrCodes[i],
-            "account": "",
+            "fireId": props.linkAccount ? firebase.auth().currentUser.uid : "",
             "phone": "",
             "message": ""
           }

@@ -4,6 +4,8 @@ import { AppBar, Button, Container, Typography } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { Toolbar } from '@material-ui/core';
 import clsx from 'clsx'
+import firebase from './../firebase'
+
 
 const useStyles = makeStyles((theme) => ({
     
@@ -104,6 +106,28 @@ const useStyles = makeStyles((theme) => ({
   }));
   
 
+async function ShowDonations() {
+    let donationsByDate = {};
+    await fetch(`http://localhost:3001/api/user/getdonations/${firebase.auth().currentUser.uid}`) // replace with http://donocode.com/qrcode/generatecode
+                  .then(response => response.json())
+                  .then(data => {
+                      data.forEach(element => {
+                          let info = donationsByDate[element.dateReceived] == null ? [] : donationsByDate[element.dateReceived];
+                          info.push({
+                              message: element.message
+                          })
+                          data[element.dateReceived] = info;
+                      });
+                    console.log(data)
+                  })
+                  .catch(error => console.log(error));
+    return (
+        <div>
+            Showing donations here
+        </div>
+    )
+}
+
 export default function Dashboard(){
     const classes = useStyles()
     
@@ -130,8 +154,9 @@ export default function Dashboard(){
             <Button variant="contained" className={classes.login}><b>Create DonoCode</b></Button>
           </Link>
         </div>
-        
-        
+        <div>
+            {/* <ShowDonations/> */}
+        </div>
     </div>
     
     </span>

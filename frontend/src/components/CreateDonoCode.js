@@ -309,7 +309,7 @@ function AttachMessage(classes, currentPage, setCurrentPage, qrCodeNum, messages
   )
 }
 
-function PrintComponent(classes, currentPage, setCurrentPage, qrCodes){
+function PrintComponent(classes, currentPage, setCurrentPage, qrCodes, linkAccount){
   // let qrCodeArray = [...qrCodes];
   // qrCodes.forEach(v => qrCodeArray.push(v));  
   // console.log(qrCodeArray)
@@ -323,6 +323,7 @@ function PrintComponent(classes, currentPage, setCurrentPage, qrCodes){
       </Button>
       <PrintContent
         qrCodes={qrCodes}
+        linkAccount = {linkAccount}
       />
   </div>
 }
@@ -347,7 +348,7 @@ export default function CreateDonoCode(){
         page = AttachMessage(classes, currentPage, setCurrentPage, qrCodeNum, messages, setMessages)
         break;
       default:
-        page = PrintComponent(classes, currentPage, setCurrentPage, qrCodes)
+        page = PrintComponent(classes, currentPage, setCurrentPage, qrCodes, linkToAccount)
         break;
     }
     console.log(qrCodes)
