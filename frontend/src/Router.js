@@ -6,6 +6,7 @@ import Register from './components/Register'
 import Settings from './components/Settings'
 import { AuthProvider } from './AuthContext'
 import PrivateRoute from './components/PrivateRoute'
+import CreateDonoCode from './components/CreateDonoCode'
 
 const Router = () => {
     return (<div>
@@ -14,6 +15,7 @@ const Router = () => {
           <Route exact path="/" component={Home}/>
           <Route path="/signin" component={Login}/>
           <Route path="/signup" component={Register}/>
+          <Route path="/createdonocode" component={CreateDonoCode}/>
           <PrivateRoute path="/settings" component={Settings}/>
         </Switch>   
       </AuthProvider>

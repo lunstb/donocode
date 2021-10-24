@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
     },
     appBar: {
         boxShadow: 'none',
-        marginTop: '20px'
+        marginTop: '50px'
     },
     heroContent: {
         
@@ -56,20 +56,20 @@ const useStyles = makeStyles((theme) => ({
         color: '#51323C'
     },
     login: {
-        padding: '15px 25px',
+        padding: '15px 30px',
         boxShadow: 'none',
         textTransform: 'none',
-        borderRadius: '5px',
+        borderRadius: '9px',
         backgroundColor: '#d9af00',
         textColor: 'black',
-        fontSize: '18px',
+        fontSize: '23px',
         '&:hover': {
             backgroundColor: '#e4c74c',
             boxShadow: 'none'
         }
     },
     hero: {
-        padding: '20vh 7%',
+        padding: '25vh 10vh 20vh 10vh',
         ['@media(max-width: 950px)'] : {
             
             textAlign: 'center'
@@ -89,15 +89,15 @@ const useStyles = makeStyles((theme) => ({
     image: {
         ['@media(min-width: 950px)'] : {
             position: 'absolute',
-            width: '40em'
+            width: '50em'
           },
         ['@media(max-width: 950px)'] : {
             
             position: 'relative',
-            width: '25em'
+            width: '0'
           },
-        right: '6%',
-        bottom: '20vh',
+        right: '10vh',
+        bottom: '12vh',
     },
     signinlink: {
         '&:link': {
@@ -135,7 +135,7 @@ export default function Home(){
         </Toolbar>
     </AppBar>
     <div className={classes.hero}>
-        <Typography variant="h2" className={classes.heroContent}><b style={{fontWeight: '800'}}>Track your impact<br/>with DonoCode!</b></Typography>
+        <Typography variant="h3" className={classes.heroContent}><b style={{fontWeight: '800'}}>Track your impact<br/>with DonoCode!</b></Typography>
         <Link to="/signin" className={classes.signinlink}>
         <Button variant="contained" className={classes.login}><b>Create DonoCode</b></Button>
         </Link>
