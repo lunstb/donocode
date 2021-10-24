@@ -72,7 +72,7 @@ const useStyles = makeStyles((theme) => ({
         textTransform: 'none',
         borderRadius: '9px',
         backgroundColor: '#d9af00',
-        textColor: 'black',
+        color: '#51323C',
         fontSize: '23px',
         '&:hover': {
             backgroundColor: '#e4c74c',
@@ -131,6 +131,7 @@ const useStyles = makeStyles((theme) => ({
             textAlign: 'center',
             height: 'auto'
           },
+          color: "#51323C"
     },
     groupSet: {
         width: '100vw',
