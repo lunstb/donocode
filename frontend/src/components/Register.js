@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import firebase from '../firebase';
 import { useAuth } from '../AuthContext';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 
 const Register = () => {
     let [firstName, setFirstName] = useState("");
@@ -85,6 +85,9 @@ const Register = () => {
                 </div>
                 <button disabled={isLoading} type="submit">Create account</button>
             </form>
+            <div>
+            Already have an account? <Link to="/signin">Log in!</Link>
+            </div>
         </div>
     )
 };

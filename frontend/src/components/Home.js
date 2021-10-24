@@ -99,6 +99,14 @@ const useStyles = makeStyles((theme) => ({
         right: '6%',
         bottom: '20vh',
     },
+    signinlink: {
+        '&:link': {
+            textDecoration: 'none',
+        },
+        '&:visited': {
+            textDecoration: 'none',
+        },
+    }
   }));
   
 
@@ -128,7 +136,9 @@ export default function Home(){
     </AppBar>
     <div className={classes.hero}>
         <Typography variant="h2" className={classes.heroContent}><b style={{fontWeight: '800'}}>Track your impact<br/>with DonoCode!</b></Typography>
+        <Link to="/signin" className={classes.signinlink}>
         <Button variant="contained" className={classes.login}><b>Create DonoCode</b></Button>
+        </Link>
         <img src={homeImage} className={classes.image}/>
     </div>
     
