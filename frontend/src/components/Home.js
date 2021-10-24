@@ -94,7 +94,7 @@ const useStyles = makeStyles((theme) => ({
         ['@media(max-width: 950px)'] : {
             
             position: 'relative',
-            width: '25em'
+            width: '0'
           },
         right: '10vh',
         bottom: '12vh',

@@ -46,10 +46,10 @@ const useStyles = makeStyles((theme)=> ({
     input: {
         background: 'transparent',
         border: '1px solid #9D8A8B',
-        borderRadius: '5px',
-        padding: '10px 15px',
+        borderRadius: '7px',
+        padding: '14px 15px',
         width: '33vw',
-        margin: '10px 0',
+        margin: '15px 0',
         fontFamily: 'inherit',
         fontSize: '18px',
         ['@media(max-width: 950px)'] : {
@@ -81,8 +81,8 @@ const useStyles = makeStyles((theme)=> ({
     },
     register: {
         fontWeight: '600',
-        margin: '5px 0 10px 0',
-        fontSize: '15px'
+        margin: '20px 0 10px 0',
+        fontSize: '18px'
     },
     signin: {
         border: '0 solid #9D8A8B',
@@ -96,7 +96,7 @@ const useStyles = makeStyles((theme)=> ({
         },
         fontWeight: '800',
         fontSize: '20px',
-        margin: '40px'
+        margin: '80px'
     },
     image: {
         ['@media(min-width: 950px)'] : {
@@ -120,6 +120,7 @@ const useStyles = makeStyles((theme)=> ({
           },
     },
     signintitle: {
+        fontSize: '30px',
         ['@media(max-width: 950px)'] : {
             width: '100vw'
           },
