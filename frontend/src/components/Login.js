@@ -3,7 +3,7 @@ import { Link, useHistory } from 'react-router-dom';
 import { AppBar, Toolbar, Button, Container, makeStyles, Typography } from '@material-ui/core';
 import { useAuth } from '../AuthContext';
 import clsx from 'clsx';
-import homeImage from '../images/Homepage.png'
+import homeImage from '../images/HomeTest.svg'
 
 const useStyles = makeStyles((theme)=> ({
     title: {
