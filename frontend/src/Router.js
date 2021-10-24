@@ -8,7 +8,7 @@ import { AuthProvider } from './AuthContext'
 import PrivateRoute from './components/PrivateRoute'
 import CreateDonoCode from './components/CreateDonoCode'
 import Dashboard from './components/Dashboard'
-import { PrintContent } from './pages/PrintComponents'
+import { PrintContent } from './components/PrintComponents'
 
 const Router = () => {
     return (<div>

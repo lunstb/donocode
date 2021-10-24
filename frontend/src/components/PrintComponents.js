@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme)=> ({
 
 }));
 
-export const PrintContent = () => {
+export const PrintContent = React.forwardRef((props, ref) => {
 
   const classes = useStyles()
 
@@ -35,20 +35,40 @@ export const PrintContent = () => {
     
     content: () => componentRef.current,
   });
-  
+  console.log(Array.from(props.qrCodes))
   return (
     <div >
       <div className={classes.printableContainer}>
-      <ComponentToPrint ref={componentRef}/>
+      <ComponentToPrint qrCodes={props.qrCodes} ref={componentRef}/>
       </div>
       {/* <div> */}
       <br/>
       <div className={classes.buttonDiv}>
       <br/>
-      <button className={classes.printButton} onClick={handlePrint}>Print this out!</button>
+      <button className={classes.printButton} onClick={()=>{
+        let donations = []
+        for(let i = 0; i<props.qrCodes.length; ++i){
+          donations[i] = {
+            "qrId": props.qrCodes[i],
+            "account": "",
+            "phone": "",
+            "message": ""
+          }
+        }
+        fetch("http://localhost:3001/api/qr/register", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            "qrCodes": donations
+          })
+        });
+        handlePrint()
+      }}>Print this out!</button>
       </div>
       
       {/* </div> */}
     </div>
   );
-};
+});
