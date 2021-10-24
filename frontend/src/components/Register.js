@@ -24,7 +24,21 @@ const Register = () => {
         try {
             setError("");
             setIsLoading(true);
-            await signup(email, password);
+            let userCredential = await signup(email, password);
+            let userId = userCredential.user.uid;
+            let user = {
+                fireId: userId,
+                firstName,
+                lastName,
+                phone
+            };
+            await fetch("/api/user/createuser", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(user)
+            });
             history.push("/");
         } catch {
             setError("Error signing up");
