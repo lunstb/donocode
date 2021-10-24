@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet';
 import { AppBar, Button, Container, TextField, Typography } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { Toolbar } from '@material-ui/core';
+import backArrow from '../images/backArrow.png';
 import clsx from 'clsx'
 
 const useStyles = makeStyles((theme) => ({
@@ -59,7 +60,14 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     pageContent: {
-      marginLeft: "50px"
+      marginLeft: "50px",
+      marginRight: "50px"
+    },
+    grace: {
+      marginTop: "12px",
+      marginLeft: "20px",
+      fontSize: "3vh",
+      width: "80px"
     },
     numberField: {
       marginRight: "20px",
@@ -82,29 +90,72 @@ const useStyles = makeStyles((theme) => ({
     resize:{
       fontSize:"6vh"
     },
+    messageResize:{
+      height: "7px"
+    },
+    attachMessage:{
+      backgroundColor: "#FFF",
+      marginBottom: "6px",
+      marginRight: "5vw",
+      borderRadius: "8px",
+      fontSize: "18px",
+      color: "#51323C",
+      display: "flex",
+      justifyContent: "space-between"
+    },
+    alignHorizontal:{
+      display: "flex",
+      justifyContent: "space-between"
+    },
+    messageField:{
+      marginTop: "12px",
+      marginRight: "8px"
+    },
+    floatLeft:{
+      float:"left"
+    }
   }));
   
+function ItemInfo(classes){
+  return (
+    <div className={classes.itemInfo}>
 
+    </div>
+  )
+}
 
-function HowManyCodes(classes, currentPage, setCurrentPage){
+function HowManyCodes(classes, currentPage, setCurrentPage, qrCodeNum, setQrCodeNum, messages, setMessages){
   return (
     <div>
-      <Link className={classes.title} to="/">
-        <Typography aria-label="Home" variant="h6">
-          Back
-        </Typography>
+      <Link className={classes.title} to="/"> 
+        <div className={clsx(classes.alignHorizontal,classes.floatLeft)}>
+          <img src={backArrow} className={classes.image}/>
+          <Typography aria-label="Home" variant="h6">
+            Back
+          </Typography>
+        </div> 
       </Link>
+      <br/>
       <div className={classes.textContent}>
         <h1 className={classes.h1}>How many DonoCodes would you like to create?</h1>
         <div>
-          <TextField id="standard-basic" label="type number here" variant="standard" className={classes.numberField} 
+          <TextField id="standard-basic" value={qrCodeNum} label="type number here" variant="standard" className={classes.numberField} 
             InputProps={{
               classes: {
                 input: classes.resize,
               },
             }}
+            onChange={e => {
+              setQrCodeNum(e.target.value)
+              messages = []
+
+              for(let i = 0; i<e.target.value; ++i){
+                messages.push("Donated Item")
+              }
+            }}
           />
         </div>
+        
       </div>
       <div>
         <Button onClick={()=>{setCurrentPage(currentPage+1)}}className={classes.nextButton} variant="contained" disableElevation>Next</Button>
@@ -116,7 +167,15 @@ function HowManyCodes(classes, currentPage, setCurrentPage){
 function LinkToAccount(classes, currentPage, setCurrentPage, linkToAccount, setLinkToAccount){
   return (
     <div>
-      <Button onClick={()=>{setCurrentPage(currentPage-1)}}className={classes.backButton} disableElevation>Back</Button>
+      
+      <Button onClick={()=>{setCurrentPage(currentPage-1)}}className={classes.backButton} disableElevation>
+          <div className={clsx(classes.alignHorizontal,classes.floatLeft)}>
+          <img src={backArrow} className={classes.image}/>
+          <Typography aria-label="Home" variant="h6">
+            Back
+          </Typography>
+        </div> 
+      </Button>
       <div className={classes.textContent}>
         <h1 className={classes.h1}>Would you like to link these DonoCodes to your account?</h1>
         <p>For example, if you are a donation center planning to hand DonoCodes out to Donors, click no.</p>
@@ -127,13 +186,42 @@ function LinkToAccount(classes, currentPage, setCurrentPage, linkToAccount, setL
   )
 }
 
-function AttachMessage(classes, currentPage, setCurrentPage){
+function AttachMessage(classes, currentPage, setCurrentPage, qrCodeNum, messages, setMessages){
+  let rows = [];
+  for (let index = 1; index <= qrCodeNum; index++) {
+    // const element = array[index];
+    rows.push(<div className={classes.attachMessage}>
+      <div key={index} className={classes.alignHorizontal}>
+        <div className={classes.grace}>{index}</div>
+        <div className={classes.alignHorizontal}>
+          <TextField id="outlined-basic" value={messages[index]} label="Item" variant="outlined" className={classes.messageField} 
+          onChange={e => setMessages({...messages, [index]: e.target.value})}
+          InputProps={{
+            classes: {
+              input: classes.messageResize,
+            },
+          }}/>
+          <p>opt.</p>
+        </div>
+      </div>
+      <Button>Add message</Button>
+    </div>);
+  }
   return (
     <div>
-      <Button onClick={()=>{setCurrentPage(currentPage-1)}}className={classes.backButton} disableElevation>Back</Button>
+      <Button onClick={()=>{setCurrentPage(currentPage-1)}}className={classes.backButton} disableElevation>
+          <div className={clsx(classes.alignHorizontal,classes.floatLeft)}>
+          <img src={backArrow} className={classes.image}/>
+          <Typography aria-label="Home" variant="h6">
+            Back
+          </Typography>
+        </div> 
+      </Button>
       <h2>Add a personal message with your DonoCode</h2>
       <p>If you choose to not put a personalized message, your recipients will receive a default message. </p>
       
+      <h3>Donations: ({qrCodeNum})</h3>
+      {rows}
     </div>
   )
 }
@@ -141,18 +229,20 @@ function AttachMessage(classes, currentPage, setCurrentPage){
 export default function CreateDonoCode(){
     const classes = useStyles()
     const [currentPage, setCurrentPage] = useState(0);
+    const [qrCodeNum, setQrCodeNum] = useState(1);
     const [linkToAccount, setLinkToAccount] = useState(false);
+    const [messages, setMessages] = useState([])
 
     let page;
     switch (currentPage) {
       case 0:
-        page = HowManyCodes(classes, currentPage, setCurrentPage)
+        page = HowManyCodes(classes, currentPage, setCurrentPage, qrCodeNum, setQrCodeNum, messages, setMessages)
         break;
       case 1:
         page = LinkToAccount(classes, currentPage, setCurrentPage, linkToAccount, setLinkToAccount)
         break;
       case 2:
-        page = AttachMessage(classes, currentPage, setCurrentPage)
+        page = AttachMessage(classes, currentPage, setCurrentPage, qrCodeNum, messages, setMessages)
         break;
       default:
         break;
