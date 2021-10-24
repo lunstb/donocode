@@ -14,8 +14,11 @@ import Stage3 from '../images/Stage3.svg'
 const useStyles = makeStyles((theme) => ({
     root: {
         height: '100vh',
+
+        minHeight: '800px',
       },
     
+      
     title: {
 
         '&:link': {
@@ -97,15 +100,15 @@ const useStyles = makeStyles((theme) => ({
     image: {
         ['@media(min-width: 950px)'] : {
             position: 'absolute',
-            width: '45em'
+            width: '46em'
           },
         ['@media(max-width: 950px)'] : {
             
             position: 'relative',
             width: '0'
           },
-        right: '10vh',
-        bottom: '12vh',
+        right: '10%',
+        bottom: '12%',
     },
     imageAbout: {
         width:'200px',
@@ -122,6 +125,7 @@ const useStyles = makeStyles((theme) => ({
     about: {
         width: '100vw',
         height: '100vh',
+        minHeight: '800px',
         backgroundColor: 'white',
         ['@media(max-width: 950px)'] : {
             textAlign: 'center',
@@ -170,6 +174,9 @@ const useStyles = makeStyles((theme) => ({
             
             marginLeft: '0'
           },
+    },
+    faq: {
+
     }
   }));
   
@@ -179,7 +186,7 @@ export default function Home(){
     
     return (
     <span>
-    <div style={{height: '92vh'}}>
+    <div style={{height: '92vh', minHeight: '800px'}}>
     <AppBar position="static" className={classes.appBar}>
         <Toolbar className={classes.toolbar}>
             <Link className={clsx(classes.title, classes.logo)} to="/">
@@ -228,20 +235,9 @@ export default function Home(){
         <h1 className={classes.titleAbout}>Receive Updates</h1>
         <p className={classes.paraAbout}>Receive an update through text and on your “My Donations” dashboard once your donation has been recieved.</p></div>
         </section>
-        {/* <Grid container className={classes.grid}>
-        <Grid item xs={2} sm={4} md={4}>
-        <h2>Create DonoCode</h2>
-        <p>Create any number of DonoCodes along with any personalized messages your want your recipients to receive.</p>
-    </Grid>
-    <Grid item xs={2} sm={4} md={4}>
-    <h2>Donate</h2>
-    <p>Attatch your DonoCodes to your desired donation items, donate, and wait for a recipient to receive your donation!</p>
-    </Grid>
-    <Grid item xs={2} sm={4} md={4}>
-    <h2>Receive Updates</h2>
-    <p>Receive an update through text and on your “My Donations” dashboard once your donation has been recieved.</p>
-    </Grid>
-        </Grid> */}
+        </div>
+        <div className={classes.faq} id="faq">
+
         </div>
     </div>
     </div>
