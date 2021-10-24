@@ -75,15 +75,15 @@ const generateQrCodes = async (num) => {
     var qrIds = []
     for (var i = 0; i < num; i++) {
       var qrId = uuid.v4();
-      db.serialize(() => {
-        db.run(`INSERT INTO qrTable (qrId) VALUES (?, ?)`, [qrId], (err) => {
-          if(err) {
-            return console.log("error creating user: "+ err.message); 
-          }
-          // get the last insert id
-          console.log(`A row has been inserted with rowid ${this.lastID}`);
-        });
-      })
+      // db.serialize(() => {
+      //   db.run(`INSERT INTO qrTable (qrId) VALUES (?)`, [qrId], (err) => {
+      //     if(err) {
+      //       return console.log("error creating qr id: "+ err.message); 
+      //     }
+      //     // get the last insert id
+      //     console.log(`A row has been inserted with rowid ${this.lastID}`);
+      //   });
+      // })
       qrIds.push(qrId)
     }
 
@@ -167,6 +167,7 @@ const setProfile = async (profileId, newInformation) => {
  * @param {String} message - The message left for the donee
  */
 const createDonationLinked = async (qrId, account, message) => {
+  console.log("create Linked")
   return new Promise(resolve => {
     db.serialize(() => {
       db.run('INSERT INTO qrTable (qrId,account,message) VALUES (?,?,?)', [qrId,account, message], (err) => {
@@ -187,6 +188,7 @@ const createDonationLinked = async (qrId, account, message) => {
  * @param {String} message 
  */
 const createDonationUnlinked = async (qrId, phone, message) => {
+  console.log("create unlinked")
   return new Promise(resolve=>{
     db.serialize(() => {
       db.run('INSERT INTO qrTable (qrId,phone,message) VALUES (?,?,?)', [qrId,phone, message], (err) => {
@@ -194,7 +196,7 @@ const createDonationUnlinked = async (qrId, phone, message) => {
           return console.log(err.message); 
         }
         console.log(qrId + " put into qr unlinked")
-      }).finalize()
+      })
     })
     return resolve(qrId+" put into qr unlinked")
   })
@@ -237,6 +239,7 @@ module.exports = {
   getProfile,
   getStatus,
   setProfile,
+  generateQrCodes,
   createDonationLinked,
   createDonationUnlinked,
   getDonation
