@@ -1,28 +1,22 @@
-import React, {useState, useEffect} from 'react'
+import React from 'react'
 import {Route, Switch} from 'react-router-dom'
 import Home from './core/Home'
-import Settings from './core/Settings'
-import firebase from './firebase'
+import Login from './components/Login'
+import Register from './components/Register'
+import Settings from './components/Settings'
+import { AuthProvider } from './AuthContext'
+import PrivateRoute from './components/PrivateRoute'
 
 const Router = () => {
-    let [isLoggedIn, setIsLoggedIn] = useState(false);
-    let [user, setUser] = useState();
-
-    firebase.auth().onAuthStateChanged((user) => {
-    if (user) {
-        setIsLoggedIn(true);
-        setUser(user);
-    } else {
-        setIsLoggedIn(false);
-        setUser(null);
-    }
-    });
-
     return (<div>
+      <AuthProvider>
         <Switch> 
           <Route exact path="/" component={Home}/>
-          <Route exact path="/settings" component={Settings}/>
+          <Route path="/signin" component={Login}/>
+          <Route path="/signup" component={Register}/>
+          <PrivateRoute path="/settings" component={Settings}/>
         </Switch>   
+      </AuthProvider>
       </div>)
 }
 
