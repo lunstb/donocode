@@ -1,29 +1,38 @@
 const express = require("express");
+const database = require("./../../database/database");
 
 const userRouter = express.Router()
 
 
 userRouter.route('/profile/:userId')
-  .get((req, res) => {
+  .get(async (req, res) => {
     var userId = req.params.userId;
 
-    res.send(userId);
+    var profileInfo = await database.getProfile(userId)
+    console.log(profileInfo)
+
+    res.send(profileInfo);
   })
 
 userRouter.route('/setprofile')
-  .post((req, res) => {
-    var firstName = req.body.firstName,
-        lastName = req.body.lastName,
-        phoneNum = req.body.phoneNum;
+  .post(async (req, res) => {
+    var profileId = req.body.profileId
+    var profile = {
+      "firstName": req.body.firstName,
+      "lastName": req.body.lastName,
+      "phone": req.body.phone
+    }
 
-    console.log(firstName + " " + lastName + " " + phoneNum);
+    console.log(await database.setProfile(profileId, profile));
   })
 
-userRouter.route('/getdonations/:userid')
-  .get((req, res) => {
+userRouter.route('/getdonations/:userId')
+  .get(async (req, res) => {
     var userId = req.params.userId;
 
-    res.send(userId);
+    var donations = await database.getDonation(userId)
+
+    res.send(donations);
   })
 
 module.exports = userRouter
