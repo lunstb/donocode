@@ -105,32 +105,30 @@ const useStyles = makeStyles((theme) => ({
     }
   }));
   
-
-async function ShowDonations() {
-    let donationsByDate = {};
-    await fetch(`http://localhost:3001/api/user/getdonations/${firebase.auth().currentUser.uid}`) // replace with http://donocode.com/qrcode/generatecode
-                  .then(response => response.json())
-                  .then(data => {
-                      data.forEach(element => {
-                          let info = donationsByDate[element.dateReceived] == null ? [] : donationsByDate[element.dateReceived];
-                          info.push({
-                              message: element.message
-                          })
-                          data[element.dateReceived] = info;
-                      });
-                    console.log(data)
-                  })
-                  .catch(error => console.log(error));
+function Donation(message) {
     return (
         <div>
-            Showing donations here
+            This is the message: {message}
+            <br/>
         </div>
     )
 }
 
 export default function Dashboard(){
     const classes = useStyles()
-    
+    const [donations, setDonations] = useState([])
+
+    useEffect(() => {
+        let fireId = firebase.auth().currentUser.uid;
+        fetch(`/api/user/getdonations/${fireId}`) // replace with http://donocode.com/qrcode/generatecode
+                    .then(response => response.json())
+                    .then(data => {
+                        setDonations(data)
+                        console.log(data)
+                    })
+                    .catch(error => console.log(error));
+    }, [])
+
     return (
     <span>
     <AppBar position="static" className={classes.appBar}>
@@ -155,7 +153,6 @@ export default function Dashboard(){
           </Link>
         </div>
         <div>
-            {/* <ShowDonations/> */}
         </div>
     </div>
     

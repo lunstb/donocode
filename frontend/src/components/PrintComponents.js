@@ -66,7 +66,23 @@ export const PrintContent = React.forwardRef((props, ref) => {
             "qrCodes": donations
           })
         });
+
+        // let body = {
+        //   "qrIds": props.qrCodes,
+        //   "fireId": firebase.auth().currentUser.uid,
+        // } 
+
+        // if (props.linkAccount){
+        //   fetch('/api/qr/linkaccount', {
+        //     method: 'POST',
+        //     headers: {
+        //       'Content-Type': 'application/json',
+        //     },
+        //     body: JSON.stringify(body),
+        //   })
+        // }
         handlePrint()
+
       }}>Print this out!</button>
       </div>
       

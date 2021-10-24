@@ -18,7 +18,7 @@ db.serialize(() => {
                   phone TEXT, 
                   donorMessage TEXT, 
                   recipientMessage TEXT, 
-                  dateReceived DATE
+                  dateReceived TEXT
                 )`).run().finalize()
 
     db.prepare(`CREATE TABLE IF NOT EXISTS accounts 
@@ -30,9 +30,6 @@ db.serialize(() => {
                   phone TEXT
                 )`).run().finalize()
 });
-
-
-
 
 /**
  * getStatus - tracks donation status of a qr code
@@ -69,22 +66,11 @@ const getStatus = async (qrId) => {
  */
 const generateQrCodes = async (num) => {
   return new Promise(resolve => {
-
     var qrIds = []
     for (var i = 0; i < num; i++) {
       var qrId = uuid.v4();
-      // db.serialize(() => {
-      //   db.run(`INSERT INTO qrTable (qrId) VALUES (?)`, [qrId], (err) => {
-      //     if(err) {
-      //       return console.log("error creating qr id: "+ err.message); 
-      //     }
-      //     // get the last insert id
-      //     console.log(`A row has been inserted with rowid ${this.lastID}`);
-      //   });
-      // })
       qrIds.push(qrId)
     }
-
     return resolve(qrIds);
   })
 }
@@ -120,7 +106,7 @@ const getProfile = async (profileId) => {
     db.serialize(() => {
       db.get(`SELECT fireId, firstName, lastName, phone FROM accounts WHERE fireId = ?`, [profileId], (err, row) => {
         if(err)
-          return console.log("error in getting profile: " + err);
+          return console.log("getProfile error in getting profile: " + err);
         if(row == null){
           return console.log("user does not exist");
         }
@@ -211,15 +197,21 @@ const getDonation = async (profileId) => {
   return new Promise(resolve => {
     var donations = [];
     db.serialize(() => {
-      db.all(`SELECT * FROM qrTable WHERE account = ?`, [profileId], function(err, rows) {  
-        rows.forEach(function (row) {  
-            donations.push({
-              message: row.donorMessage,
-              dateReceived: row.dateReceived
-            })
-        }) 
-        return resolve(donations); 
-      });
+      db.all(`SELECT * FROM qrTable WHERE fireId = ?`, [profileId], (err, rows) => {
+        if(err)
+          return console.log("error in getting donations: " + err);
+        if(rows == null)
+          return console.log("user does not exist");
+          console.log(rows)
+        rows.forEach(row => {
+          console.log(row)
+          donations.push({
+            "message": row.donorMessage,
+            "dateReceived": row.DateReceived,
+          })
+        })
+        return resolve(donations)
+      })
     })
   })
 }
@@ -236,7 +228,7 @@ const getDonorPhone = async (qrId) => {
     db.serialize(() => {
       db.get(`SELECT phone FROM qrTable WHERE qrId = ?`, [qrId], (err, row) => {
         if(err)
-          console.log("error in getting profile: " + err);
+          console.log("getDonorPhone error in getting profile: " + err);
         if(row == null)
           console.log("user does not exist");
         phone = row[0].phone;
@@ -256,12 +248,34 @@ const getDonorPhone = async (qrId) => {
 const registerReceipt = async (qrId, dateReceived, recipientMessage) => {
   return new Promise(resolve => {
     db.serialize(() => {
-      db.run(`UPDATE qrTable SET dateReceived = ${dateReceived}, recipientMessage = ${recipientMessage} WHERE qrId = ${qrId}`, (err) => {
+      dateReceived = "YESMF"
+      db.run(`UPDATE qrTable SET dateReceived = ? , recipientMessage = ? WHERE qrId = ?`, [dateReceived, recipientMessage, qrId], (err) => {
         if(err)
-          console.log("error in getting profile: " + err);
+          console.log("registerReceipt error in getting profile: " + err);
         return resolve("updated qr table");
       })
     })
+  })
+}
+
+const linkQrFire = async (qrId, fireId) => {
+  let profile = getProfile(fireId);
+  let { phone } = profile;
+  console.log(phone, qrId, fireId);
+  return new Promise(resolve => {
+    db.serialize(() => {
+      db.run(`UPDATE qrTable SET fireId = ${fireId}, phone = ${phone} WHERE qrId = ${qrId}`, (err) => {
+        if(err)
+          console.log("linkQrFire error in getting profile: " + err);
+        return resolve("linked id");
+      })
+    })
+  })
+}
+
+const linkAccount = async (qrIds, fireId) => {
+  qrIds.forEach(qrId => {
+    linkQrFire(qrId, fireId);
   })
 }
 
@@ -275,5 +289,8 @@ module.exports = {
   createDonationLinked,
   createDonationUnlinked,
   getDonation,
-  getDonorPhone
+  getDonorPhone,
+  registerReceipt,
+  linkAccount,
+  linkQrFire
 }

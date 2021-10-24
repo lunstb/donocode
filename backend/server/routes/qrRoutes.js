@@ -13,22 +13,23 @@ qrRouter.route('/register')
   .post(async (req, res) => {
     console.log("attempting to register")
     console.log(req.body.qrCodes)
-    // var qrCodes = JSON.parse(req.body.qrCodes)
+    if (req.body.qrCodes[0].fireId) {
+      await req.body.qrCodes.forEach(async qrCode => {
+        let profile = await database.getProfile(qrCode.fireId);
+        await database.createDonationLinked(qrCode.qrId,qrCode.fireId, "");      
+      });
+    } else {
+      await req.body.qrCodes.forEach(async qrCode => {
+        await database.createDonationUnlinked(qrCode.qrId, qrCode.phone, qrCode.message)  
+      });
+    }
+  })
 
-    await req.body.qrCodes.forEach(async qrCode => {
-      const donation = {
-        "qrId": qrCode.qrId,
-        "fireId": qrCode.fireId,
-        "phone": qrCode.phone,
-        "donorMessage": qrCode.donorMessage
-      }
-      console.log("inserting", donation)
-      if(donation.account){
-        await database.createDonationLinked(donation.qrId,donation.fireId, donation.message);
-      }else{
-        await database.createDonationUnlinked(donation.qrId, donation.phone, donation.message)
-      }
-    });
+qrRouter.route('/linkaccount')
+  .post(async (req, res) => {
+    console.log("attempting to link account")
+    let { qrIds, fireId } = req.body;
+    await database.linkAccount(qrIds, fireId);
   })
 
 qrRouter.route('/generatecode/:number')
@@ -74,8 +75,8 @@ qrRouter.route("/donation/new-unlinked")
 qrRouter.route("/register-receipt/:qrId")
   .post(async (req, res) => {
     var qrId = req.params.qrId;
-    let (dateReceived, recipientMessage) = req.body;
-    await database.registerReceipt(qrId, dateReceived, recipientMessage);
+    let {dateReceived, recipientMessage} = req.body;
+    await database.registerReceipt(qrId, dateReceived , recipientMessage);
     res.send("Receipt Registered");
   })
 

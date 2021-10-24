@@ -7,6 +7,7 @@ import backArrow from '../images/backArrow.svg';
 import clsx from 'clsx'
 import { ComponentToPrint } from './ComponentToPrint';
 import { PrintContent } from './PrintComponents';
+import firebase from '../firebase'
 
 const useStyles = makeStyles((theme) => ({
     
@@ -224,7 +225,7 @@ function HowManyCodes(classes, currentPage, setCurrentPage, qrCodeNum, setQrCode
               }
 
               // make a fetch request to the server to get the qr codes
-              fetch(`http://localhost:3001/api/qr/generatecode/${e.target.value}`) // replace with http://donocode.com/qrcode/generatecode
+              fetch(`api/qr/generatecode/${e.target.value}`) // replace with http://donocode.com/qrcode/generatecode
                   .then(response => response.json())
                   .then(data => {
                     setQrCodes(data)
@@ -246,7 +247,6 @@ function HowManyCodes(classes, currentPage, setCurrentPage, qrCodeNum, setQrCode
 function LinkToAccount(classes, currentPage, setCurrentPage, linkToAccount, setLinkToAccount){
   return (
     <div>
-      
       <Button onClick={()=>{setCurrentPage(currentPage-1)}}className={classes.backButton} disableElevation>
           <div className={clsx(classes.alignHorizontal,classes.floatLeft)}>
             <img src={backArrow} className={classes.image}/>
@@ -263,8 +263,9 @@ function LinkToAccount(classes, currentPage, setCurrentPage, linkToAccount, setL
   )
 }
 
-function AttachMessage(classes, currentPage, setCurrentPage, qrCodeNum, messages, setMessages){
+function AttachMessage(classes, currentPage, setCurrentPage, qrCodeNum, messages, setMessages, qrCodes, linkToAccount){
   let rows = [];
+
   for (let index = 1; index <= qrCodeNum; index++) {
     // const element = array[index];
     rows.push(<div className={classes.attachMessage}>
@@ -345,13 +346,13 @@ export default function CreateDonoCode(){
         page = LinkToAccount(classes, currentPage, setCurrentPage, linkToAccount, setLinkToAccount)
         break;
       case 2:
-        page = AttachMessage(classes, currentPage, setCurrentPage, qrCodeNum, messages, setMessages)
+        page = AttachMessage(classes, currentPage, setCurrentPage, qrCodeNum, messages, setMessages, qrCodes, linkToAccount)
         break;
       default:
         page = PrintComponent(classes, currentPage, setCurrentPage, qrCodes, linkToAccount)
         break;
     }
-    console.log(qrCodes)
+    
     return (
       <span>
         <AppBar position="static" className={classes.appBar}>

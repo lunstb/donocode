@@ -9,7 +9,7 @@ function RecipientGreeting() {
             <h1>A message has been sent to you!</h1>
             <p>Enter message here</p>
             <Link to={{
-                pathname: "/recipient-add-sms",
+                pathname: "/recipient/addmessage",
                 state: { qrId: qrId }
             }}>
                 <button>Next</button>
