@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import { AppBar, Button, Container, TextField, Typography } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { Toolbar } from '@material-ui/core';
-import backArrow from '../images/backArrow.png';
+import backArrow from '../images/backArrow.svg';
 import clsx from 'clsx'
 
 const useStyles = makeStyles((theme) => ({
@@ -102,8 +102,10 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     image: {
-      height: '40px',
-      width: '40px'
+      marginTop: '5px',
+      marginRight: '5px',
+      height: '25px',
+      width: '25px'
     },
     pageContent: {
       marginLeft: "80px",
