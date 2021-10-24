@@ -227,12 +227,6 @@ const getDonation = async (profileId) => {
   })
 }
 
-const test = () => {
-  createUser("213jhkf", "Berke","Lunstad","6518084290")
-  createDonationLinked("21312", "TestID", 1, "happy birthday")    
-}
-
-test()
 
 module.exports = {
   createUser,
