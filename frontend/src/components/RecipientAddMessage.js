@@ -125,14 +125,11 @@ function RecipientAddMessage() {
     let [boxChecked, setBoxChecked] = useState(false);
     let [message, setMessage] = useState('');
     const { qrId } = useParams();
-    // const location = useLocation();
-    // const { qrId } = location.state;
-
 
     const handleSend = () => {
         let dateReceived = new Date();
         if (message) {
-            fetch('/qr/sendmessage/' + qrId, {
+            fetch('api/qr/sendmessage/' + qrId, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -149,7 +146,6 @@ function RecipientAddMessage() {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                dateReceived,
                 recipientMessage: message,
             })
         })

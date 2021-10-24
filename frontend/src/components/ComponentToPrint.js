@@ -90,7 +90,7 @@ export const ComponentToPrint = React.forwardRef((props, ref) => {
               <article>Scan the QR below for a message from this item’s donor!</article>
               <p><b>item {index}</b></p>
               <QRCode 
-              value={`https://donocode.com/generatecode/${item}`} 
+              value={`https://donocode.com/scan/${item}`} 
               size={100}
               bgColor="#FFFFFF"
               fgColor="#000000"

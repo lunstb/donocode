@@ -13,6 +13,7 @@ import DonorGreeting from './components/DonorGreeting'
 import DonorAddMessage from './components/DonorAddMessage'
 import Dashboard from './components/Dashboard'
 import { PrintContent } from './components/PrintComponents'
+import PostScanPages from './components/PostScanPages'
 
 const Router = () => {
     return (<div>
@@ -25,10 +26,11 @@ const Router = () => {
           <PrivateRoute path="/createdonocode" component={CreateDonoCode}/>
           <PrivateRoute path="/dashboard" component={Dashboard}/>
           <PrivateRoute path="/settings" component={Settings}/>
+          <Route path="/scan" component={PostScanPages}/>
           <Route exact path="/donor/greeting" component={DonorGreeting}/>
           <Route exact path="/donor/addmessage" component={DonorAddMessage}/>
           <Route exact path="/recipient/greeting" component={RecipientGreeting}/>
-          <Route exact path="/recipient/addmessage" component={RecipientAddMessage}/>
+          <Route exact path="/recipient/addmessage/:qrId" component={RecipientAddMessage}/>
         </Switch>   
       </AuthProvider>
       </div>)

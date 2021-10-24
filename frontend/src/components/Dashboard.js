@@ -4,6 +4,8 @@ import { AppBar, Button, Container, Typography } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { Toolbar } from '@material-ui/core';
 import clsx from 'clsx'
+import firebase from './../firebase'
+
 
 const useStyles = makeStyles((theme) => ({
     
@@ -103,10 +105,30 @@ const useStyles = makeStyles((theme) => ({
     }
   }));
   
+function Donation(message) {
+    return (
+        <div>
+            This is the message: {message}
+            <br/>
+        </div>
+    )
+}
 
 export default function Dashboard(){
     const classes = useStyles()
-    
+    const [donations, setDonations] = useState([])
+
+    useEffect(() => {
+        let fireId = firebase.auth().currentUser.uid;
+        fetch(`/api/user/getdonations/${fireId}`) // replace with http://donocode.com/qrcode/generatecode
+                    .then(response => response.json())
+                    .then(data => {
+                        setDonations(data)
+                        console.log(data)
+                    })
+                    .catch(error => console.log(error));
+    }, [])
+
     return (
     <span>
     <AppBar position="static" className={classes.appBar}>
@@ -130,8 +152,8 @@ export default function Dashboard(){
             <Button variant="contained" className={classes.login}><b>Create DonoCode</b></Button>
           </Link>
         </div>
-        
-        
+        <div>
+        </div>
     </div>
     
     </span>
