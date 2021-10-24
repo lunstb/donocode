@@ -11,16 +11,18 @@ const client = new twilio(twilioSID, twilioAuthToken);
 
 qrRouter.route('/register')
   .post(async (req, res) => {
-    var qrCodes = JSON.parse(req.body.qrCodes)
+    console.log("attempting to register")
+    console.log(req.body.qrCodes)
+    // var qrCodes = JSON.parse(req.body.qrCodes)
 
-    await qrCodes.forEach(async qrCode => {
+    await req.body.qrCodes.forEach(async qrCode => {
       const donation = {
         "qrId": qrCode.qrId,
         "account": qrCode.account,
         "phone": qrCode.phone,
         "message": qrCode.message
       }
-
+      console.log("inserting", donation)
       if(donation.account){
         await database.createDonationLinked(donation.qrId,donation.account, donation.message);
       }else{
@@ -29,13 +31,13 @@ qrRouter.route('/register')
     });
   })
 
-qrRouter.route('/generatecode:number')
+qrRouter.route('/generatecode/:number')
   .get(async (req, res) => {
     var num = req.params.number;
-    res.send(await database.generateQrCode(num));
+    res.send(await database.generateQrCodes(num));
   })
 
-qrRouter.route('/getstatus:donationId')
+qrRouter.route('/getstatus/:donationId')
   .get(async (req, res) => {
     var donationId = req.params.donationId;
 
