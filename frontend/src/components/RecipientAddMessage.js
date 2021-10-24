@@ -1,11 +1,38 @@
 import React, { useEffect, useState } from 'react'
+import { useLocation } from 'react-router';
+
 
 function RecipientAddMessage() {
     let [boxChecked, setBoxChecked] = useState(false);
     let [message, setMessage] = useState('');
+    const location = useLocation();
+    const { qrId } = location.state;
+
 
     const handleSend = () => {
-        // todo: send message
+        let dateReceived = new Date();
+        if (message) {
+            fetch('/qr/sendmessage/' + qrId, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    message,
+                })
+            })  
+        }
+
+        fetch('/api/qr/register-receipt/' + qrId, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                dateReceived,
+                recipientMessage: message,
+            })
+        })
     }
 
     return (

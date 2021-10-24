@@ -1,4 +1,4 @@
-import { Link, useParams } from '@material-ui/core'
+import { Link, useParams } from 'react-router-dom'
 import React from 'react'
 
 function RecipientGreeting() {
@@ -8,7 +8,12 @@ function RecipientGreeting() {
         <div>
             <h1>A message has been sent to you!</h1>
             <p>Enter message here</p>
-            <Link to="/recipient-add-sms"><button>Next</button></Link>
+            <Link to={{
+                pathname: "/recipient-add-sms",
+                state: { qrId: qrId }
+            }}>
+                <button>Next</button>
+            </Link>
         </div>
     )
 }

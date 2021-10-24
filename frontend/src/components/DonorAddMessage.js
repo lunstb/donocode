@@ -1,12 +1,31 @@
 import React, {useState} from 'react'
+import { useLocation } from 'react-router';
 
 function DonorAddMessage() {
     let [message, setMessage] = useState('');
     let [name, setName] = useState('');
     let [isChecked, setIsChecked] = useState(false);
+    const location = useLocation();
+    const { qrId, phone } = location.state;
 
     const handleSend = () => {
-        // todo: send message
+        let body = {
+            qrId, 
+            account: null,
+            phone,
+            donorMessage: message,
+        }
+        try {
+            fetch("/api/qr/donation/new-unlinked", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(body)
+            })
+        } catch (err) {
+            console.log(err);
+        }
     }
 
     return (
