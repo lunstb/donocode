@@ -8,19 +8,20 @@ import clsx from 'clsx'
 
 const useStyles = makeStyles((theme) => ({
     
-    title: {
+  title: {
 
-        '&:link': {
-            textDecoration: 'none',
-            color: '#51323C'
-        },
-        '&:visited': {
-            textDecoration: 'none',
-            color: '#51323C'
-        },
+    '&:link': {
+        textDecoration: 'none',
         color: '#51323C'
-
     },
+    '&:visited': {
+        textDecoration: 'none',
+        color: '#51323C'
+    },
+    color: '#51323C',
+    margin: "0 20px"
+
+},
     image: {
       marginRight: "7px"
     },
@@ -74,6 +75,7 @@ const useStyles = makeStyles((theme) => ({
       marginTop: "25px",
       marginRight: "30px",
       marginLeft: "40%",
+      marginBottom: "100px",
       width: "20%",
       '&:hover': {
         background: '#C99F00',
@@ -104,7 +106,7 @@ const useStyles = makeStyles((theme) => ({
       width: '40px'
     },
     pageContent: {
-      marginLeft: "5vw",
+      marginLeft: "80px",
       marginRight: "50px",
     },
     verticalAlign: {
@@ -134,22 +136,34 @@ const useStyles = makeStyles((theme) => ({
       },
     },
     toolbar: {
-        backgroundColor: '#fefbef',
-    },
+      backgroundColor: '#fefbef',
+      padding: '0'
+  },
     appBar: {
       boxShadow: 'none',
-      marginLeft: '4vw',
-      marginTop: '4vw'
-  },
+      marginTop: '50px'
+    },
+    logo: {
+      padding: '0 0 0 10vh',
+      margin: "0 20px 0 0",
+      fontWeight: '900!important',
+      color: '#d9af00',
+      '&:link': {
+          textDecoration: 'none',
+          color: '#d9af00'
+      },
+      '&:visited': {
+          textDecoration: 'none',
+          color: '#d9af00'
+      },
+    },
     textContent: {
       margin: '60px 0'
     },
     resize:{
       fontSize:"4vh"
     },
-    messageResize:{
-      height: "7px"
-    },
+    
     attachMessage:{
       backgroundColor: "#FFF",
       marginBottom: "6px",
@@ -160,12 +174,16 @@ const useStyles = makeStyles((theme) => ({
       display: "flex",
       justifyContent: "space-between"
     },
+    settingsButton: {
+      position: "absolute",
+      right: "5vw"
+    },
     alignHorizontal:{
       display: "flex",
       justifyContent: "space-between"
     },
     messageField:{
-      marginTop: "12px",
+      marginTop: "2px",
       marginRight: "8px"
     },
     floatLeft:{
@@ -177,7 +195,7 @@ const useStyles = makeStyles((theme) => ({
 function HowManyCodes(classes, currentPage, setCurrentPage, qrCodeNum, setQrCodeNum, messages, setMessages){
   return (
     <div>
-      <Link className={classes.title} to="/"> 
+      <Link className={classes.title} to="/dashboard"> 
         <div className={clsx(classes.alignHorizontal,classes.floatLeft)}>
           <img src={backArrow} className={classes.image}/>
           <h6 className={classes.h6}>Back</h6>
@@ -301,27 +319,27 @@ export default function CreateDonoCode(){
     }
     
     return (
-      <div>
+      <span>
         <AppBar position="static" className={classes.appBar}>
-            <Toolbar className={classes.toolbar}>
-                <Link className={clsx(classes.title, classes.logo)} to="/">
-                    <Typography aria-label="Home" variant="h4">
-                        <b style={{fontWeight: '900'}}>DonoCode</b>
-                    </Typography>
-                </Link>
-                <Link className={classes.title} to="/settings">
-                    <Typography aria-label="Home" variant="h6">
-                        Setting
-                    </Typography>
-                </Link>
-            </Toolbar>
-        </AppBar>
+          <Toolbar className={classes.toolbar}>
+              <Link className={clsx(classes.title, classes.logo)} to="/dashboard">
+                  <Typography aria-label="Home" variant="h4">
+                      <b style={{fontWeight: '900'}}>DonoCode</b>
+                  </Typography>
+              </Link>
+              <Link className={clsx(classes.title, classes.settingsButton)} to="/settings">
+                  <Typography aria-label="Home" variant="h6">
+                      Settings
+                  </Typography>
+              </Link>
+          </Toolbar>
+      </AppBar>
         <div className={classes.pageContent}>
           <div className={classes.verticalAlign}>
             {page}
           </div>
         </div>
-      </div>
+      </span>
     
     );
 }

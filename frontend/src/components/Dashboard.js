@@ -22,20 +22,24 @@ const useStyles = makeStyles((theme) => ({
         margin: "0 20px"
 
     },
-    logo: {
-        padding: '0 0 0 10vh',
-        margin: "0 20px 0 0",
-        fontWeight: '900!important',
-        color: '#d9af00',
-        '&:link': {
-            textDecoration: 'none',
-            color: '#d9af00'
-        },
-        '&:visited': {
-            textDecoration: 'none',
-            color: '#d9af00'
-        },
+    settingsButton: {
+      position: "absolute",
+      right: "5vw"
     },
+    logo: {
+      padding: '0 0 0 10vh',
+      margin: "0 20px 0 0",
+      fontWeight: '900!important',
+      color: '#d9af00',
+      '&:link': {
+          textDecoration: 'none',
+          color: '#d9af00'
+      },
+      '&:visited': {
+          textDecoration: 'none',
+          color: '#d9af00'
+      },
+  },
     
     toolbar: {
         backgroundColor: '#fefbef',
@@ -46,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
         marginTop: '50px'
     },
     heroContent: {
-        
+        marginTop: '2vh',
         lineHeight: '1.3em',
         paddingBottom: '7vh',
         ['@media(max-width: 950px)'] : {
@@ -69,7 +73,7 @@ const useStyles = makeStyles((theme) => ({
         }
     },
     hero: {
-        padding: '25vh 10vh 20vh 10vh',
+        padding: '5vh 10vh 20vh 10vh',
         ['@media(max-width: 950px)'] : {
             
             textAlign: 'center'
@@ -86,18 +90,9 @@ const useStyles = makeStyles((theme) => ({
         },
         textDecoration: 'none',
     },
-    image: {
-        ['@media(min-width: 950px)'] : {
-            position: 'absolute',
-            width: '50em'
-          },
-        ['@media(max-width: 950px)'] : {
-            
-            position: 'relative',
-            width: '0'
-          },
-        right: '10vh',
-        bottom: '12vh',
+    alignHorizontal: {
+      display: "flex",
+      justifyContent: "space-between"
     },
     signinlink: {
         '&:link': {
@@ -110,36 +105,34 @@ const useStyles = makeStyles((theme) => ({
   }));
   
 
-export default function Home(){
+export default function Dashboard(){
     const classes = useStyles()
     
     return (
     <span>
     <AppBar position="static" className={classes.appBar}>
         <Toolbar className={classes.toolbar}>
-            <Link className={clsx(classes.title, classes.logo)} to="/">
+            <Link className={clsx(classes.title, classes.logo)} to="/dashboard">
                 <Typography aria-label="Home" variant="h4">
                     <b style={{fontWeight: '900'}}>DonoCode</b>
                 </Typography>
             </Link>
-            <Link className={classes.title} to="/">
-                <Typography aria-label="Home" variant="h5">
-                    How it Works
-                </Typography>
-            </Link>
-            <Link className={classes.title} to="/">
-                <Typography aria-label="Home" variant="h5">
-                    FAQ
+            <Link className={clsx(classes.title, classes.settingsButton)} to="/settings">
+                <Typography aria-label="Home" variant="h6">
+                    Settings
                 </Typography>
             </Link>
         </Toolbar>
     </AppBar>
     <div className={classes.hero}>
-        <Typography variant="h3" className={classes.heroContent}><b style={{fontWeight: '800'}}>Track your impact<br/>with DonoCode!</b></Typography>
-        <Link to="/dashboard" className={classes.signinlink}>
-        <Button variant="contained" className={classes.login}><b>Create DonoCode</b></Button>
-        </Link>
-        <img src={homeImage} className={classes.image}/>
+        <div className={classes.alignHorizontal}>
+          <Typography variant="h3" className={classes.heroContent}><b style={{fontWeight: '800'}}>My Donations</b></Typography>
+          <Link to="/createdonocode" className={classes.signinlink}>
+            <Button variant="contained" className={classes.login}><b>Create DonoCode</b></Button>
+          </Link>
+        </div>
+        
+        
     </div>
     
     </span>

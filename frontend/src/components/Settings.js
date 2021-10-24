@@ -18,6 +18,10 @@ const useStyles = makeStyles((theme) => ({
       fontSize: '4vh',
       fontFamily: 'Nunito',
     },
+    settingsButton: {
+      position: "absolute",
+      right: "5vw"
+    },
     pageContent: {
       marginLeft: '6.25%'
     },
@@ -55,34 +59,37 @@ const useStyles = makeStyles((theme) => ({
     },
     title: {
 
-        '&:link': {
-            textDecoration: 'none',
-            color: '#51323C'
-        },
-        '&:visited': {
-            textDecoration: 'none',
-            color: '#51323C'
-        },
-        color: '#51323C'
+      '&:link': {
+          textDecoration: 'none',
+          color: '#51323C'
+      },
+      '&:visited': {
+          textDecoration: 'none',
+          color: '#51323C'
+      },
+      color: '#51323C',
+      margin: "0 20px"
 
-    },
+  },
     emptyDiv: {
       ['@media (max-width:780px)']: { // eslint-disable-line no-useless-computed-key
         width: '0%'
       }
     },
     logo: {
-        fontWeight: 'bold',
-        color: '#d9af00',
-        '&:link': {
-            textDecoration: 'none',
-            color: '#d9af00'
-        },
-        '&:visited': {
-            textDecoration: 'none',
-            color: '#d9af00'
-        },
-    },
+      padding: '0 0 0 10vh',
+      margin: "0 20px 0 0",
+      fontWeight: '900!important',
+      color: '#d9af00',
+      '&:link': {
+          textDecoration: 'none',
+          color: '#d9af00'
+      },
+      '&:visited': {
+          textDecoration: 'none',
+          color: '#d9af00'
+      },
+  },
     alignHorizontal: {
       display: "flex",
       justifyContent: "space-between"
@@ -94,11 +101,13 @@ const useStyles = makeStyles((theme) => ({
       width: "100%"
     },
     toolbar: {
-        backgroundColor: '#fefbef',
-    },
+      backgroundColor: '#fefbef',
+      padding: '0'
+  },
     appBar: {
-        boxShadow: 'none'
-    },
+      boxShadow: 'none',
+      marginTop: '50px'
+  },
   }));
   
 
@@ -124,20 +133,19 @@ export default function Settings(){
     
     return (
       <div>
-    <AppBar position="static" className={classes.appBar}>
-        <Toolbar className={classes.toolbar}>
-            <Link className={clsx(classes.title, classes.logo)} to="/">
-                <Typography aria-label="Home" variant="h6">
-                    <b>DonoCode</b>
-                </Typography>
-            </Link>
-
-            <Link className={classes.title} to="/settings">
-                <Typography aria-label="Home" variant="h6">
-                    Settings
-                </Typography>
-            </Link>
-        </Toolbar>
+        <AppBar position="static" className={classes.appBar}>
+            <Toolbar className={classes.toolbar}>
+                <Link className={clsx(classes.title, classes.logo)} to="/dashboard">
+                    <Typography aria-label="Home" variant="h4">
+                        <b style={{fontWeight: '900'}}>DonoCode</b>
+                    </Typography>
+                </Link>
+                <Link className={clsx(classes.title, classes.settingsButton)} to="/settings">
+                    <Typography aria-label="Home" variant="h6">
+                        Settings
+                    </Typography>
+                </Link>
+            </Toolbar>
         </AppBar>
         <div className={classes.pageContent}>
           <h1 className={classes.h1}>Settings</h1>
