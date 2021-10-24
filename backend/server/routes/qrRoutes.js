@@ -18,13 +18,13 @@ qrRouter.route('/register')
     await req.body.qrCodes.forEach(async qrCode => {
       const donation = {
         "qrId": qrCode.qrId,
-        "account": qrCode.account,
+        "fireId": qrCode.fireId,
         "phone": qrCode.phone,
-        "message": qrCode.message
+        "donorMessage": qrCode.donorMessage
       }
       console.log("inserting", donation)
       if(donation.account){
-        await database.createDonationLinked(donation.qrId,donation.account, donation.message);
+        await database.createDonationLinked(donation.qrId,donation.fireId, donation.message);
       }else{
         await database.createDonationUnlinked(donation.qrId, donation.phone, donation.message)
       }
@@ -37,22 +37,23 @@ qrRouter.route('/generatecode/:number')
     res.send(await database.generateQrCodes(num));
   })
 
-qrRouter.route('/getstatus/:donationId')
+qrRouter.route('/getstatus/:qrId')
   .get(async (req, res) => {
-    var donationId = req.params.donationId;
+    var qrId = req.params.qrId;
 
-    res.send(await database.getStatus(donationId));
+    res.send(await database.getStatus(qrId));
   })
 
-qrRouter.route('/sendmessage')
+qrRouter.route('/sendmessage/:qrId')
   .post(async (req, res) => {
-    console.log("inside send message", req.body);
-    var { fireId, donationMsg }  = req.body;
-    var profileInfo = await database.getProfile(fireId);
+    var qrId = req.params.qrId;
+    var { message }  = req.body;
+    var phone = await database.getDonorPhone(qrId);
+
     client.messages.create({
-      body: donationMsg,
+      body: message,
       from: twilioNumber,
-      to: profileInfo.phone
+      to: phone
     })
     .then(message => {
       console.log("Message sent with id", message.sid);
@@ -62,6 +63,24 @@ qrRouter.route('/sendmessage')
     })
     res.send("Message Sent");
   })
+
+qrRouter.route("/donation/new-unlinked")
+  .get(async (req, res) => {
+    var { qrId, phone, message } = req.body;
+    await database.createDonationUnlinked(qrId, phone, message);
+    res.send("Donation Created");
+  })
+
+qrRouter.route("/register-receipt/:qrId")
+  .post(async (req, res) => {
+    var qrId = req.params.qrId;
+    let (dateReceived, recipientMessage) = req.body;
+    await database.registerReceipt(qrId, dateReceived, recipientMessage);
+    res.send("Receipt Registered");
+  })
+
+
+
 
 
 module.exports = qrRouter

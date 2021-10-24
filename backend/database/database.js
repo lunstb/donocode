@@ -14,10 +14,10 @@ db.serialize(() => {
                 (
                   id integer primary key autoincrement, 
                   qrId TEXT, 
-                  account INTEGER, 
+                  fireId TEXT, 
                   phone TEXT, 
-                  message TEXT, 
-                  messageReceived TEXT, 
+                  donorMessage TEXT, 
+                  recipientMessage TEXT, 
                   dateReceived DATE
                 )`).run().finalize()
 
@@ -36,27 +36,25 @@ db.serialize(() => {
 
 /**
  * getStatus - tracks donation status of a qr code
- * @param {String} donationId - Alphanumeric value correlating to the id of 
+ * @param {String} qrId - Alphanumeric value correlating to the id of 
  * @returns value correlating to status of code: 0 if not setup, 1 if setup but not received, 2 if setup and received
  */
-const getStatus = async (donationId) => {
+const getStatus = async (qrId) => {
   return new Promise(resolve => {
-    console.log(donationId)
+    console.log(qrId)
     var qrStatus = -1;
     db.serialize(() => {
-      db.get(`SELECT * FROM qrTable WHERE donationId == ${donationId}`, (err, row) => {
+      db.get(`SELECT * FROM qrTable WHERE qrId == ${qrId}`, (err, row) => {
         if(row == null){
           throw "that donation doesn't exist"
         }
 
-        if(row[0].Account == -1){
+        if(!row[0].phone){
           qrStatus = 0;
-        }else{
-          if(row[0].DateReceived == null){
+        }else if(!row[0].DateReceived){
             qrStatus = 1;
-          }else{
+        } else {
             qrStatus = 2;
-          }
         }
       })
     })
@@ -122,9 +120,9 @@ const getProfile = async (profileId) => {
     db.serialize(() => {
       db.get(`SELECT fireId, firstName, lastName, phone FROM accounts WHERE fireId = ?`, [profileId], (err, row) => {
         if(err)
-          console.log("error in getting profile: " + err);
+          return console.log("error in getting profile: " + err);
         if(row == null){
-          console.log("user does not exist");
+          return console.log("user does not exist");
         }
 
         console.log(row)
@@ -142,13 +140,13 @@ const getProfile = async (profileId) => {
 
 /**
  * setProfile - Sets profile with new information
- * @param {Number} profileId - Integer correlating to row of user
+ * @param {Number} fireId - Integer correlating to row of user
  * @param {JSON} newInformation - JSON object with information (doesn't need to include all information)
  */
-const setProfile = async (profileId, newInformation) => {
+const setProfile = async (fireId, newInformation) => {
   return new Promise(resolve => {
     db.serialize(() => {
-      var profile = getProfile(profileId)
+      var profile = getProfile(fireId)
       db.run(`UPDATE accounts SET firstName = ${newInformation.firstName == null ? newInformation.firstName : profile.firstname}, 
                                   lastName = ${newInformation.lastName == null ? newInformation.lastName : profile.lastName}, 
                                   phone = ${newInformation.phone == null ? newInformation.phone : profile.phone}`, (err) => {
@@ -163,14 +161,16 @@ const setProfile = async (profileId, newInformation) => {
 /**
  * createDonationLinked
  * @param {String} qrId - The alphanumeric value generated for the hex
- * @param {Number} account - Linked to row of user
- * @param {String} message - The message left for the donee
+ * @param {Number} fireId - Linked to row of user
+ * @param {String} donorMessage - The message left for the donee
  */
-const createDonationLinked = async (qrId, account, message) => {
-  console.log("create Linked")
+const createDonationLinked = async (qrId, fireId, donorMessage) => {
   return new Promise(resolve => {
     db.serialize(() => {
-      db.run('INSERT INTO qrTable (qrId,account,message) VALUES (?,?,?)', [qrId,account, message], (err) => {
+      var profile = getProfile(fireId);
+      var { phone } = profile;
+
+      db.run('INSERT INTO qrTable (qrId,fireId,phone,donorMessage) VALUES (?,?,?,?)', [qrId,fireId,phone,donorMessage], (err) => {
         if(err) {
           return console.log(err.message); 
         }
@@ -185,13 +185,12 @@ const createDonationLinked = async (qrId, account, message) => {
  * createDonationUnlinked
  * @param {String} qrId 
  * @param {String} phone 
- * @param {String} message 
+ * @param {String} donorMessage 
  */
-const createDonationUnlinked = async (qrId, phone, message) => {
-  console.log("create unlinked")
+const createDonationUnlinked = async (qrId, phone, donorMessage) => {
   return new Promise(resolve=>{
     db.serialize(() => {
-      db.run('INSERT INTO qrTable (qrId,phone,message) VALUES (?,?,?)', [qrId,phone, message], (err) => {
+      db.run('INSERT INTO qrTable (qrId,phone,donorMessage) VALUES (?,?,?)', [qrId,phone,donorMessage], (err) => {
         if(err) {
           return console.log(err.message); 
         }
@@ -201,6 +200,7 @@ const createDonationUnlinked = async (qrId, phone, message) => {
     return resolve(qrId+" put into qr unlinked")
   })
 }
+
 
 /**
  * getDonation - Returns a list of objects representing received donations
@@ -214,16 +214,54 @@ const getDonation = async (profileId) => {
       db.all(`SELECT * FROM qrTable WHERE account = ?`, [profileId], function(err, rows) {  
         rows.forEach(function (row) {  
             donations.push({
-              message: row.message,
+              message: row.donorMessage,
               dateReceived: row.dateReceived
             })
         }) 
         return resolve(donations); 
       });
-      
     })
+  })
+}
 
-    
+
+/**
+ * getDonorPhone - Returns the phone number of the donor
+ * @param qrId - The alphanumeric value generated for the qr hex 
+ * @returns - The phone number of the donor
+ */
+const getDonorPhone = async (qrId) => {
+  return new Promise(resolve => {
+    var phone;
+    db.serialize(() => {
+      db.get(`SELECT phone FROM qrTable WHERE qrId = ?`, [qrId], (err, row) => {
+        if(err)
+          console.log("error in getting profile: " + err);
+        if(row == null)
+          console.log("user does not exist");
+        phone = row[0].phone;
+        return resolve(phone);
+      })
+    })
+  })
+}
+
+/**
+ * registerReceipt - Updates the database with the date the donation was received
+ * @param {String} qrId - The alphanumeric value generated for the qr hex
+ * @param {String} dateReceived - The date the donation was received
+ * @param {String} recipientMessage - The message left by the recipient
+ * return
+ */
+const registerReceipt = async (qrId, dateReceived, recipientMessage) => {
+  return new Promise(resolve => {
+    db.serialize(() => {
+      db.run(`UPDATE qrTable SET dateReceived = ${dateReceived}, recipientMessage = ${recipientMessage} WHERE qrId = ${qrId}`, (err) => {
+        if(err)
+          console.log("error in getting profile: " + err);
+        return resolve("updated qr table");
+      })
+    })
   })
 }
 
@@ -236,5 +274,6 @@ module.exports = {
   generateQrCodes,
   createDonationLinked,
   createDonationUnlinked,
-  getDonation
+  getDonation,
+  getDonorPhone
 }
