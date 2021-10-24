@@ -150,7 +150,7 @@ const Login = () => {
             setError("");
             setIsLoading(true);
             await signin(email, password);
-            history.push("/");
+            history.push("/dashboard");
         } catch {
             setError("Failed to log in");
         }
